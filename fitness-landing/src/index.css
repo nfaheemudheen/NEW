@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ---- Primary light green + deep green ---- */
+  --color-brand-50: #f1faf4;
+  --color-brand-100: #e1f4e7;
+  --color-brand-200: #c7ebd3;
+  --color-brand-300: #a8ddb5;
+  --color-brand-400: #83c998;
+  --color-brand-500: #61b27c;
+  --color-brand-600: #4a9866;
+  --color-brand-700: #397653;
+  --color-brand-800: #2f6044;
+  --color-brand-900: #274e38;
+  --color-brand-950: #143023;
+
+  /* ---- Light blue + sky blue ---- */
+  --color-aqua-50: #f0f9fd;
+  --color-aqua-100: #dff3fb;
+  --color-aqua-200: #b8dff5;
+  --color-aqua-300: #98d2f0;
+  --color-aqua-400: #75c5e8;
+  --color-aqua-500: #52b3db;
+  --color-aqua-600: #3698c0;
+  --color-aqua-700: #2c7ca0;
+  --color-aqua-800: #2a6581;
+  --color-aqua-900: #29546a;
+  --color-aqua-950: #183546;
+
+  /* ---- Green-tinted neutrals ---- */
+  --color-slate-50: #f8fbf8;
+  --color-slate-100: #eff5f1;
+  --color-slate-200: #e1ebe4;
+  --color-slate-300: #cbdacf;
+  --color-slate-400: #a6b8ad;
+  --color-slate-500: #82948a;
+  --color-slate-600: #68766f;
+  --color-slate-700: #505f57;
+  --color-slate-800: #3a4a42;
+  --color-slate-900: #24352d;
+  --color-slate-950: #16241d;
+
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --shadow-premium: 0 30px 60px -30px rgb(36 53 45 / 0.28);
+  --shadow-glow: 0 20px 50px -20px rgb(57 118 83 / 0.4);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+  overflow-x: clip;
+}
+
+body {
+  @apply bg-slate-50 text-slate-600 antialiased selection:bg-brand-200 selection:text-brand-900;
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  min-width: 320px;
+  overflow-x: clip;
+}
+
+img {
+  max-width: 100%;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.font-display h1, .font-display h2, .font-display h3, .font-display h4 {
+  line-height: 1.12;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex w-full sm:w-auto items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold text-white rounded-full transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0;
+    background-image: linear-gradient(135deg, var(--color-brand-700) 0%, var(--color-aqua-700) 100%);
+    box-shadow: 0 18px 32px -18px rgb(57 118 83 / 0.65);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 22px 38px -18px rgb(44 124 160 / 0.55);
+  }
+
+  .btn-outline {
+    @apply inline-flex w-full sm:w-auto items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold text-brand-800 bg-white/80 border border-brand-200 rounded-full transition-all duration-300 hover:bg-brand-50 hover:border-brand-300 hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20;
+  }
+
+  .btn-light {
+    @apply inline-flex w-full sm:w-auto items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold text-brand-800 bg-white rounded-full transition-all duration-300 hover:bg-brand-50 hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-4 focus-visible:ring-white/30;
+    box-shadow: 0 18px 32px -20px rgb(20 48 35 / 0.5);
+  }
+
+  .btn-ghost-light {
+    @apply inline-flex w-full sm:w-auto items-center justify-center gap-2 px-7 py-3.5 text-base font-semibold text-white border border-white/30 rounded-full transition-all duration-300 hover:bg-white/10 hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-4 focus-visible:ring-white/20;
+  }
+}
+
+.section {
+  @apply py-20 px-6 sm:px-10 sm:py-24 lg:px-16 lg:py-28;
+}
+
+.section-header {
+  @apply mb-14 text-center;
+}
+
+.section-badge {
+  @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.16em] text-brand-700 bg-brand-50 border border-brand-100 mb-5;
+}
+
+.section-title {
+  @apply text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-900 mb-5 tracking-tight text-balance;
+}
+
+.section-subtitle {
+  @apply text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed;
+}
+
+.nav-link {
+  @apply text-sm font-medium text-slate-600 transition-colors hover:text-brand-700 px-4 py-2 rounded-full;
+}
+
+.input-field {
+  @apply w-full px-4 py-3 text-slate-800 bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-brand-500/15 focus:border-brand-400 transition-all placeholder:text-slate-400;
+}
+
+.card {
+  @apply bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 transition-all duration-300;
+  box-shadow: 0 24px 50px -36px rgb(36 53 45 / 0.35);
+}
+
+.card:hover {
+  @apply -translate-y-1 border-brand-200;
+  box-shadow: 0 30px 60px -34px rgb(36 53 45 / 0.28);
+}
+
+.glass-card {
+  @apply bg-white/90 backdrop-blur-md border border-white/70 rounded-2xl;
+  box-shadow: 0 24px 50px -28px rgb(36 53 45 / 0.35);
+}
+
+.text-gradient {
+  background-image: linear-gradient(120deg, var(--color-brand-700) 10%, var(--color-aqua-600) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-bloom {
+  background:
+    radial-gradient(60% 70% at 6% 0%, rgb(168 221 181 / 0.32) 0%, transparent 64%),
+    radial-gradient(52% 62% at 96% 8%, rgb(184 223 245 / 0.42) 0%, transparent 66%),
+    linear-gradient(180deg, #fbfdfb 0%, #f8fbf8 100%);
+}
+
+.bg-soft {
+  background:
+    radial-gradient(45% 65% at 0% 45%, rgb(168 221 181 / 0.22) 0%, transparent 70%),
+    radial-gradient(45% 65% at 100% 55%, rgb(184 223 245 / 0.3) 0%, transparent 70%),
+    #f8fbf8;
+}
+
+/* ---- Scroll reveal ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .reveal-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
