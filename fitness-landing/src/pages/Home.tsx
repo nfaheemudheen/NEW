@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import Header from '@/components/Header'
-import SharedJourneyImage from '@/components/SharedJourneyImage'
 import Footer from '@/components/Footer'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import Hero from '@/sections/Hero'
@@ -11,6 +10,7 @@ import Statistics from '@/sections/Statistics'
 import Membership from '@/sections/Membership'
 import Wellness from '@/sections/Wellness'
 import Testimonials from '@/sections/Testimonials'
+import HomeContact from '@/sections/HomeContact'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 
 export default function Home() {
@@ -30,16 +30,16 @@ export default function Home() {
         Skip to content
       </a>
       <Header onJoin={() => handleEnquire('Membership enquiry')} />
-      <SharedJourneyImage />
       <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
         <Hero onStart={() => handleEnquire('Membership enquiry')} />
         <About />
-        <Programs onEnquire={handleEnquire} />
+        <Programs />
         <WhyChooseUs />
-        <Statistics onEnquire={handleEnquire} />
+        <Statistics />
         <Membership onEnquire={handleEnquire} />
-        <Wellness onEnquire={handleEnquire} />
+        <Wellness />
         <Testimonials />
+        <HomeContact />
       </main>
 
       <Footer />

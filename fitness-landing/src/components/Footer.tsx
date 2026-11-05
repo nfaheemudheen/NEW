@@ -180,9 +180,7 @@ export default function Footer() {
               >
                 Send an enquiry <ArrowUpRight size={15} />
               </a>
-              <p className="mt-3 text-[11px] leading-relaxed text-brand-200/60">
-                Sample contact details for development.
-              </p>
+              
             </div>
           </div>
 

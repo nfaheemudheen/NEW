@@ -1,7 +1,7 @@
 export type Membership = {
   id: string
   name: string
-  price: string
+  price: number
   cadence: string
   duration: string
   description: string
@@ -14,9 +14,9 @@ export const MEMBERSHIPS: Membership[] = [
   {
     id: 'starter',
     name: 'Starter',
-    price: '$79',
+    price: 7500,
     cadence: 'per month',
-    duration: 'Monthly · no lock-in',
+    duration: 'No lock-in',
     description: 'A gentle way to build your rhythm and meet the studio.',
     features: [
       '4 group classes each month',
@@ -31,9 +31,9 @@ export const MEMBERSHIPS: Membership[] = [
   {
     id: 'premium',
     name: 'Premium',
-    price: '$129',
+    price: 12200,
     cadence: 'per month',
-    duration: 'Monthly · 3-month minimum',
+    duration: '3-month minimum',
     description: 'Our most loved plan for women who want it all.',
     features: [
       'Unlimited group classes',
@@ -48,9 +48,9 @@ export const MEMBERSHIPS: Membership[] = [
   {
     id: 'personal',
     name: 'Personal Coaching',
-    price: '$249',
+    price: 23500,
     cadence: 'per month',
-    duration: 'Monthly · 3-month minimum',
+    duration: '3-month minimum',
     description: 'Private, focused coaching for a goal that matters to you.',
     features: [
       '4 private sessions each month',

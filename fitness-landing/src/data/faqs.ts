@@ -20,11 +20,6 @@ export const FAQS: Faq[] = [
       'Choose Starter if you want flexibility, Premium if you want unlimited classes and the full studio experience, or Personal Coaching if you want private, goal-specific support. We are happy to talk it through with you.',
   },
   {
-    question: 'Are personal training sessions available?',
-    answer:
-      'Yes. Personal Coaching includes four private sessions each month, and existing members can add single sessions subject to availability.',
-  },
-  {
     question: 'Do you offer online fitness classes?',
     answer:
       'Yes. Our online library includes live and on-demand strength, yoga and mobility sessions. Premium members get full access, and online-only options are available on request.',

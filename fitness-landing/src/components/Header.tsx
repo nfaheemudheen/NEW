@@ -5,6 +5,8 @@ import { useLocation } from 'react-router-dom'
 import { NAV_LINKS, STUDIO } from '@/data/site'
 import { cn } from '@/lib/utils'
 
+const HEADER_LINKS = NAV_LINKS.filter((link) => link.id !== 'membership')
+
 type HeaderProps = {
   onJoin: () => void
 }
@@ -26,7 +28,7 @@ export default function Header({ onJoin }: HeaderProps) {
       const marker = window.scrollY + 120
       let current = 'home'
 
-      for (const link of NAV_LINKS) {
+      for (const link of HEADER_LINKS) {
         if (link.id === 'about' || link.id === 'contact' || link.id === 'faqs') continue
         const section = document.getElementById(link.id)
         if (!section) continue
@@ -104,6 +106,7 @@ export default function Header({ onJoin }: HeaderProps) {
 
   const navHref = (id: string) => {
     if (id === 'about') return '/about'
+    if (id === 'services') return '/services'
     if (id === 'contact') return '/contact'
     if (id === 'faqs') return '/faqs'
     if (id === 'home') return '/'
@@ -111,6 +114,7 @@ export default function Header({ onJoin }: HeaderProps) {
   }
   const isNavActive = (id: string) => {
     if (location.pathname === '/about') return id === 'about'
+    if (location.pathname.startsWith('/services')) return id === 'services'
     if (location.pathname === '/contact') return id === 'contact'
     if (location.pathname === '/faqs') return id === 'faqs'
     if (id === 'about' || id === 'contact' || id === 'faqs') return false
@@ -118,7 +122,7 @@ export default function Header({ onJoin }: HeaderProps) {
   }
   const navCurrent = (id: string) => {
     if (!isNavActive(id)) return undefined
-    return id === 'home' || id === 'about' || id === 'contact' || id === 'faqs'
+    return id === 'home' || id === 'about' || id === 'services' || id === 'contact' || id === 'faqs'
       ? 'page'
       : 'location'
   }
@@ -148,7 +152,7 @@ export default function Header({ onJoin }: HeaderProps) {
           </a>
 
           <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main navigation">
-            {NAV_LINKS.map((link) => (
+            {HEADER_LINKS.map((link) => (
               <a
                 key={link.id}
                 href={navHref(link.id)}
@@ -219,7 +223,7 @@ export default function Header({ onJoin }: HeaderProps) {
               </div>
 
               <nav className="space-y-1" aria-label="Mobile navigation">
-                {NAV_LINKS.map((link) => (
+                {HEADER_LINKS.map((link) => (
                   <a
                     key={link.id}
                     href={navHref(link.id)}

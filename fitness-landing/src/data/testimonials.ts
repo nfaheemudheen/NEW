@@ -17,7 +17,7 @@ export const TESTIMONIALS: Testimonial[] = [
       'I came for the workouts and stayed for the women. Twelve weeks in, I feel stronger than I have in years — and I actually look forward to class.',
     rating: 5,
     timeAgo: '2 weeks ago',
-    avatarColor: 'bg-[#b35c48]',
+    avatarColor: 'bg-brand-700',
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ export const TESTIMONIALS: Testimonial[] = [
       "It's the first studio where I haven't felt like I had to keep up. Every class meets you where you are, and the coaches notice everything.",
     rating: 5,
     timeAgo: '1 month ago',
-    avatarColor: 'bg-[#2c7ca0]',
+    avatarColor: 'bg-aqua-700',
   },
   {
     id: 3,
@@ -37,6 +37,6 @@ export const TESTIMONIALS: Testimonial[] = [
       "The mix of strength, yoga and honest check-ins is exactly what my body needed. I'm lifting heavier, sleeping better, and standing taller.",
     rating: 5,
     timeAgo: '3 months ago',
-    avatarColor: 'bg-[#397653]',
+    avatarColor: 'bg-brand-500',
   },
 ]

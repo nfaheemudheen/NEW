@@ -1,4 +1,4 @@
-import { Sparkles, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import SectionHeading from '@/components/SectionHeading'
 import { TESTIMONIALS } from '@/data/testimonials'
 
@@ -27,11 +27,11 @@ function GoogleIcon({ size = 26 }: { size?: number }) {
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="section relative overflow-hidden bg-brand-50/70">
+    <section id="testimonials" className="section relative overflow-hidden bg-soft">
       <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-aqua-200/30 blur-[110px]" />
       <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-brand-200/30 blur-[100px]" />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto max-w-7xl rounded-[2.5rem] border border-white/90 bg-white/55 p-5 shadow-[0_28px_80px_-48px_rgba(9,39,71,0.3)] backdrop-blur-sm sm:rounded-[3rem] sm:p-8 lg:p-10">
         <SectionHeading
           eyebrow="Member stories"
           title={
@@ -41,64 +41,72 @@ export default function Testimonials() {
               <span className="italic text-gradient">She stayed for the women.</span>
             </>
           }
-          description="Honest words from members who found their rhythm — and a room that had their back. These stories are sample content for development."
+          description="Honest words from members who found their rhythm and a room that had their back."
+          className="mb-9 sm:mb-11"
         />
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3" data-reveal data-reveal-delay="80">
-          {TESTIMONIALS.map((testimonial) => (
+        <div className="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-5">
+          {TESTIMONIALS.map((testimonial, index) => (
             <article
               key={testimonial.id}
-              className="flex flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-premium"
+              className="group relative isolate flex h-full min-h-[315px] flex-col overflow-hidden rounded-[1.8rem] border border-brand-100/80 bg-gradient-to-br from-white via-white to-brand-50/70 p-5 shadow-[0_18px_48px_-34px_rgba(9,39,71,0.32)] transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-[0_28px_60px_-32px_rgba(4,123,233,0.28)] sm:p-6"
+              data-reveal
+              data-reveal-delay={String(index * 100)}
             >
-              <div className="mb-5 flex items-start justify-between gap-4">
+              <div className="pointer-events-none absolute -right-10 -top-12 -z-10 h-36 w-36 rounded-full bg-aqua-100/70 blur-2xl transition-transform duration-500 group-hover:scale-150" />
+
+              <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <span
-                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-lg font-semibold text-white ${testimonial.avatarColor}`}
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-lg font-bold text-white shadow-md ring-4 ring-white transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105 ${testimonial.avatarColor}`}
                     aria-hidden="true"
                   >
                     {testimonial.name.charAt(0)}
                   </span>
                   <div className="min-w-0">
                     <p className="truncate font-semibold text-slate-900">{testimonial.name}</p>
-                    <p className="text-sm text-slate-500">{testimonial.reviewCount} reviews</p>
                   </div>
                 </div>
-                <div className="flex shrink-0 flex-col items-center gap-1">
-                  <GoogleIcon />
-                  <span className="text-[11px] font-medium text-slate-500">Google Review</span>
+                <div className="flex shrink-0 flex-col items-center gap-1.5">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm transition-transform duration-300 group-hover:-rotate-6">
+                    <GoogleIcon size={21} />
+                  </span>
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.1em] text-slate-400">Google</span>
                 </div>
               </div>
 
-              <div className="mb-4 flex items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
                 <div
-                  className="flex items-center gap-0.5 text-amber-400"
+                  className="flex items-center gap-0.5 rounded-full bg-amber-50 px-3 py-1.5 text-amber-400"
                   aria-label={`${testimonial.rating} out of 5 stars`}
                 >
                   {Array.from({ length: 5 }).map((_, index) => (
                     <Star
                       key={index}
-                      size={17}
+                      size={15}
                       fill={index < testimonial.rating ? 'currentColor' : 'none'}
                       className={index < testimonial.rating ? '' : 'text-slate-300'}
                     />
                   ))}
                 </div>
-                <span className="text-sm text-slate-500">{testimonial.timeAgo}</span>
+                <span className="text-xs font-medium text-slate-400">{testimonial.timeAgo}</span>
               </div>
 
-              <blockquote className="flex-1 text-[15px] leading-relaxed text-slate-700">
-                {testimonial.quote}
-              </blockquote>
+              <div className="relative mt-4 flex-1">
+                <blockquote className="relative pr-5 font-display text-[1.05rem] leading-7 text-slate-700 sm:text-lg">
+                  {testimonial.quote}
+                </blockquote>
+              </div>
+
+              <div className="mt-5 flex items-center justify-between border-t border-brand-100/80 pt-4">
+                <span className="text-[9px] font-bold uppercase tracking-[0.16em] text-brand-700">Member story</span>
+                <span className="text-[10px] font-medium text-slate-400">{testimonial.reviewCount} reviews</span>
+              </div>
+              <span className="absolute bottom-0 left-5 h-1 w-10 rounded-full bg-brand-500 transition-all duration-300 group-hover:w-20 group-hover:bg-aqua-500 sm:left-6" />
             </article>
           ))}
         </div>
 
-        <p
-          className="mt-8 flex items-center justify-center gap-2 text-center text-xs text-slate-400"
-          data-reveal
-        >
-          <Sparkles size={13} /> Reviews and names are placeholders for development.
-        </p>
       </div>
     </section>
   )
