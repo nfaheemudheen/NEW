@@ -33,12 +33,14 @@ export default function Membership({ onEnquire }: MembershipProps) {
           </p>
         </div>
 
-        <div className="mt-10 grid items-stretch gap-5 lg:mt-14 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-10 grid items-stretch gap-5 md:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
           {MEMBERSHIPS.map((plan, index) => (
             <article
               key={plan.id}
               className={cn(
-                'group relative isolate flex min-h-[620px] flex-col overflow-hidden rounded-[2rem] border p-6 transition-all duration-300 hover:-translate-y-2 sm:p-7',
+                'group relative isolate flex min-h-[560px] flex-col overflow-hidden rounded-[2rem] border p-6 transition-all duration-300 hover:-translate-y-2 sm:min-h-[600px] sm:p-7 lg:min-h-[620px]',
+                index === MEMBERSHIPS.length - 1 &&
+                  'md:col-span-2 md:mx-auto md:w-1/2 lg:col-span-1 lg:mx-0 lg:w-full',
                 plan.popular
                   ? 'border-brand-800 bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800 text-white shadow-[0_28px_70px_-34px_rgba(9,39,71,0.6)] hover:shadow-[0_34px_80px_-34px_rgba(4,123,233,0.5)]'
                   : 'border-slate-200/90 bg-white/95 text-slate-700 shadow-[0_24px_55px_-40px_rgba(9,39,71,0.3)] hover:border-brand-300 hover:shadow-[0_30px_65px_-36px_rgba(4,123,233,0.3)]',

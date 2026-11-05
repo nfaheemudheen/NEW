@@ -155,13 +155,43 @@ function ClassSection({ mode, features, onEnquire }: { mode: ClassMode; features
           <Link to="/services" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition hover:text-brand-950"><ArrowLeft size={17} />Back to class options</Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {regularFeatures.map((feature, index) => <FeatureCard key={feature.title} feature={feature} index={index} />)}
+          {regularFeatures.map((feature, index) => {
+            const centerLastAtTablet =
+              regularFeatures.length % 2 === 1 && index === regularFeatures.length - 1
+            return (
+              <FeatureCard
+                key={feature.title}
+                feature={feature}
+                index={index}
+                className={
+                  centerLastAtTablet
+                    ? 'sm:col-span-2 sm:mx-auto sm:w-1/2 lg:col-span-1 lg:mx-0 lg:w-full'
+                    : undefined
+                }
+              />
+            )
+          })}
         </div>
         {weekendFeatures.length > 0 && (
           <div className="mt-10">
             <div className="mb-5 flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-aqua-200/50 text-aqua-900"><Music2 size={19} /></span><div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">Make the weekend yours</p><h3 className="font-display text-2xl text-brand-950">Weekend special programs</h3></div></div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {weekendFeatures.map((feature, index) => <FeatureCard key={feature.title} feature={feature} index={index} />)}
+              {weekendFeatures.map((feature, index) => {
+                const centerLastAtTablet =
+                  weekendFeatures.length % 2 === 1 && index === weekendFeatures.length - 1
+                return (
+                  <FeatureCard
+                    key={feature.title}
+                    feature={feature}
+                    index={index}
+                    className={
+                      centerLastAtTablet
+                        ? 'sm:col-span-2 sm:mx-auto sm:w-1/2 lg:col-span-1 lg:mx-0 lg:w-full'
+                        : undefined
+                    }
+                  />
+                )
+              })}
             </div>
           </div>
         )}
@@ -174,10 +204,18 @@ function ClassSection({ mode, features, onEnquire }: { mode: ClassMode; features
   )
 }
 
-function FeatureCard({ feature, index }: { feature: ClassFeature; index: number }) {
+function FeatureCard({
+  feature,
+  index,
+  className,
+}: {
+  feature: ClassFeature
+  index: number
+  className?: string
+}) {
   const Icon = feature.icon
   return (
-    <article className="group overflow-hidden rounded-[1.5rem] border border-brand-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-premium" data-reveal data-reveal-delay={index ? String(Math.min(index * 60, 180)) : undefined}>
+    <article className={`group overflow-hidden rounded-[1.5rem] border border-brand-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-premium ${className ?? ''}`} data-reveal data-reveal-delay={index ? String(Math.min(index * 60, 180)) : undefined}>
       <div className="relative h-40 overflow-hidden sm:h-44"><img src={feature.image} alt="" aria-hidden="true" loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-brand-950/55 to-transparent" /><span className="absolute bottom-3 left-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/30 bg-white/90 text-brand-700 shadow-sm"><Icon size={19} /></span><span className="absolute right-4 top-3 text-[10px] font-bold tracking-[0.16em] text-white drop-shadow">{String(index + 1).padStart(2, '0')}</span></div>
       <div className="p-5 sm:p-6"><h4 className="font-display text-xl leading-snug text-brand-950">{feature.title}</h4><p className="mt-2 text-sm leading-6 text-slate-600">{feature.description}</p></div>
     </article>

@@ -40,7 +40,7 @@ export default function Faq({ onEnquire }: FaqProps) {
           </div>
         </header>
 
-        <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
+        <div className="grid gap-4 md:grid-cols-2 lg:gap-5">
           {FAQ_COLUMNS.map((column, columnIndex) => (
             <div className="space-y-3" key={`faq-column-${columnIndex}`}>
               {column.map((faq, itemIndex) => {

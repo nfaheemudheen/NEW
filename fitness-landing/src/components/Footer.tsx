@@ -87,7 +87,7 @@ export default function Footer() {
     <>
       <footer className="mt-auto bg-brand-950 text-brand-100">
         <div className="mx-auto max-w-7xl px-6 pb-24 pt-16 sm:pb-16 lg:px-10">
-          <div className="mb-14 grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1.1fr]">
+          <div className="mb-14 grid grid-cols-2 gap-8 sm:gap-10 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1.1fr]">
             <div className="col-span-2 lg:col-span-1">
               <a
                 href="#home"

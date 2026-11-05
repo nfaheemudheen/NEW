@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { cn } from '@/lib/utils'
 
 const DIET_PLAN_OPTIONS = [
   {
@@ -98,11 +99,15 @@ export default function DietPlansPage() {
               </p>
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-3 lg:gap-6">
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {DIET_PLAN_OPTIONS.map(({ icon: Icon, label, title, description, details, accent }, index) => (
                 <article
                   key={title}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-white bg-white/90 p-6 shadow-[0_24px_60px_-42px_rgba(9,39,71,0.32)] transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-[0_32px_65px_-40px_rgba(9,39,71,0.3)] sm:p-8"
+                  className={cn(
+                    'group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-white bg-white/90 p-6 shadow-[0_24px_60px_-42px_rgba(9,39,71,0.32)] transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-[0_32px_65px_-40px_rgba(9,39,71,0.3)] sm:p-8',
+                    index === DIET_PLAN_OPTIONS.length - 1 &&
+                      'md:col-span-2 md:mx-auto md:w-1/2 lg:col-span-1 lg:mx-0 lg:w-full',
+                  )}
                   data-reveal
                   data-reveal-delay={index * 80}
                 >

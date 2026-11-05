@@ -1,6 +1,7 @@
 import { Star } from 'lucide-react'
 import SectionHeading from '@/components/SectionHeading'
 import { TESTIMONIALS } from '@/data/testimonials'
+import { cn } from '@/lib/utils'
 
 function GoogleIcon({ size = 26 }: { size?: number }) {
   return (
@@ -49,7 +50,11 @@ export default function Testimonials() {
           {TESTIMONIALS.map((testimonial, index) => (
             <article
               key={testimonial.id}
-              className="group relative isolate flex h-full min-h-[315px] flex-col overflow-hidden rounded-[1.8rem] border border-brand-100/80 bg-gradient-to-br from-white via-white to-brand-50/70 p-5 shadow-[0_18px_48px_-34px_rgba(9,39,71,0.32)] transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-[0_28px_60px_-32px_rgba(4,123,233,0.28)] sm:p-6"
+              className={cn(
+                'group relative isolate flex h-full min-h-[315px] flex-col overflow-hidden rounded-[1.8rem] border border-brand-100/80 bg-gradient-to-br from-white via-white to-brand-50/70 p-5 shadow-[0_18px_48px_-34px_rgba(9,39,71,0.32)] transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-[0_28px_60px_-32px_rgba(4,123,233,0.28)] sm:p-6',
+                index === TESTIMONIALS.length - 1 &&
+                  'md:col-span-2 md:mx-auto md:w-1/2 xl:col-span-1 xl:mx-0 xl:w-full',
+              )}
               data-reveal
               data-reveal-delay={String(index * 100)}
             >

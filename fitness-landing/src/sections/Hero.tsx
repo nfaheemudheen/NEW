@@ -10,7 +10,7 @@ export default function Hero({ onStart }: HeroProps) {
   const reduceMotion = useReducedMotion()
 
   return (
-    <section id="home" className="relative isolate min-h-[680px] overflow-hidden bg-brand-950 text-white sm:min-h-[740px]">
+    <section id="home" className="relative isolate min-h-[600px] overflow-hidden bg-brand-950 text-white sm:min-h-[680px] lg:min-h-[740px]">
       <img
         src={heroImage}
         alt=""
@@ -20,14 +20,14 @@ export default function Hero({ onStart }: HeroProps) {
       />
       <div className="absolute inset-0 bg-brand-950/65" />
 
-      <div className="relative mx-auto flex min-h-[680px] max-w-7xl items-center justify-center px-6 py-28 text-center sm:min-h-[740px] sm:px-10 lg:px-16">
+      <div className="relative mx-auto flex min-h-[600px] max-w-7xl items-center justify-center px-5 py-20 text-center sm:min-h-[680px] sm:px-10 sm:py-28 lg:min-h-[740px] lg:px-16">
         <motion.div
           className="relative z-10 mx-auto max-w-4xl"
           initial={reduceMotion ? false : { opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
+          <h1 className="font-display text-[clamp(2.25rem,9vw,3rem)] font-semibold leading-[1.02] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem]">
             Move with purpose.
             <span className="mt-2 block italic text-aqua-300">Feel more like you.</span>
           </h1>

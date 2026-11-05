@@ -100,7 +100,7 @@ export default function Gallery() {
         />
 
         <div
-          className="grid auto-rows-[150px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[180px] lg:auto-rows-[190px] lg:grid-cols-4"
+          className="grid auto-rows-[150px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[180px] md:grid-cols-3 lg:auto-rows-[190px] lg:grid-cols-4"
           data-reveal
           data-reveal-delay="80"
         >
