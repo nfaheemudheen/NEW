@@ -3,6 +3,8 @@ import { API_BASE_URL, apiUrl } from '@/lib/api'
 import type { Submission } from '@/lib/submissions'
 
 export const isSheetsConfigured = API_BASE_URL.length > 0
+const SHEETS_WEBHOOK_URL = (import.meta.env.VITE_SHEETS_WEBHOOK_URL ?? '').trim()
+const SHEETS_SHARED_SECRET = (import.meta.env.VITE_SHEETS_SHARED_SECRET ?? '').trim()
 const SPREADSHEET_ID = (import.meta.env.VITE_SHEETS_SPREADSHEET_ID ?? '').trim()
 export const sheetsSpreadsheetUrl = (
   import.meta.env.VITE_SHEETS_SPREADSHEET_URL ||
@@ -24,8 +26,42 @@ async function request(path: string, init: RequestInit = {}) {
   return payload
 }
 
-/** Writes a contact form submission directly to the server, which stores it in Sheets. */
+/** Writes a public contact enquiry to Apps Script from the browser when configured. */
 export async function createSubmissionOnBackend(submission: Submission): Promise<SheetSyncResult> {
+  if (SHEETS_WEBHOOK_URL) {
+    try {
+      const response = await fetch(SHEETS_WEBHOOK_URL, {
+        method: 'POST',
+        // text/plain avoids a browser CORS preflight for the Apps Script web app.
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          secret: SHEETS_SHARED_SECRET,
+          action: 'upsert',
+          id: submission.id,
+          createdAt: submission.createdAt,
+          fullName: submission.fullName,
+          email: submission.email,
+          phone: submission.phone,
+          interest: submission.interest,
+          method: submission.method,
+          source: submission.source,
+          status: submission.status,
+          notes: submission.notes,
+        }),
+      })
+      const payload = await response.json().catch(() => null)
+      if (!response.ok || payload?.ok !== true) {
+        throw new Error(payload?.error || `Google Sheets returned ${response.status}.`)
+      }
+      return { ok: true }
+    } catch (error) {
+      // Preserve the existing backend path as a fallback if the direct webhook is down.
+      if (!isSheetsConfigured) {
+        return { ok: false, error: error instanceof Error ? error.message : 'Could not save the enquiry to Google Sheets.' }
+      }
+    }
+  }
+
   try {
     await request('/api/enquiries', {
       method: 'POST',
