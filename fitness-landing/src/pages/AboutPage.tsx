@@ -4,7 +4,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SectionHeading from '@/components/SectionHeading'
 import WhatsAppButton from '@/components/WhatsAppButton'
-import { TRAINERS } from '@/data/trainers'
+import { MANAGEMENT_TEAM, TRAINERS } from '@/data/trainers'
 import studioImage from '@/assets/studio.jpg'
 import exerciseCutout from '@/assets/exercise-cutout.webp'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
@@ -12,7 +12,6 @@ import { useScrollReveal } from '@/hooks/useScrollReveal'
 export default function AboutPage() {
   useScrollReveal()
   const navigate = useNavigate()
-  const managementTeam = TRAINERS.slice(0, 2)
   const goToEnquiry = () => navigate('/contact')
 
   return (
@@ -42,16 +41,16 @@ export default function AboutPage() {
               <span className="mt-2 block italic text-aqua-200">women’s wellness.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-brand-100/85 sm:text-lg">
-              Bloom is a women-only studio where expert coaching, thoughtful programs and a warm
+              Her Space is a women-only studio where expert coaching, thoughtful programs and a warm
               community help you feel stronger in every season of life.
             </p>
             <a href="#management" className="btn-ghost-light mt-8">
-              Get to know Bloom <ArrowRight size={18} />
+              Get to know Her Space <ArrowRight size={18} />
             </a>
           </div>
         </section>
 
-        <section id="management" className="section bg-bloom">
+        <section id="management" className="section bg-Her Space">
           <div className="mx-auto max-w-7xl">
             <SectionHeading
               eyebrow="Management team"
@@ -66,17 +65,17 @@ export default function AboutPage() {
             />
 
             <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-2">
-              {managementTeam.map((member) => (
+              {MANAGEMENT_TEAM.map((member) => (
                 <article
                   key={member.id}
-                  className="overflow-hidden rounded-[2.5rem] border border-brand-100 bg-white shadow-premium"
+                  className="group overflow-hidden rounded-[2.5rem] border border-brand-100 bg-white shadow-premium"
                 >
-                  <div className="h-[260px] overflow-hidden sm:h-[300px]">
+                  <div className="h-[260px] overflow-hidden bg-brand-50 sm:h-[300px]">
                     <img
                       src={member.image}
-                      alt={`${member.name}, ${member.role} at Bloom Studio`}
+                      alt={`${member.name}, ${member.role} at Her Space Studio`}
                       loading="lazy"
-                      className="h-full w-full object-cover object-top"
+                      className="h-full w-full scale-[0.94] object-cover object-top transition-transform duration-700 group-hover:scale-[0.98]"
                     />
                   </div>
                   <div className="p-5 sm:p-6">
@@ -104,19 +103,22 @@ export default function AboutPage() {
               {TRAINERS.map((trainer) => (
                 <article
                   key={trainer.id}
-                  className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm"
+                  className="group overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm"
                 >
                   <div className="aspect-square overflow-hidden bg-brand-50">
                     <img
                       src={trainer.image}
-                      alt={trainer.name}
+                      alt={`${trainer.name}, ${trainer.role}`}
                       loading="lazy"
-                      className="h-full w-full object-cover"
+                      className="h-full w-full scale-[0.94] object-cover transition-transform duration-700 group-hover:scale-[0.98]"
                     />
                   </div>
                   <div className="p-4">
                     <h3 className="font-display text-xl text-slate-900">{trainer.name}</h3>
                     <p className="mt-1 text-xs font-semibold text-brand-700">{trainer.role}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                      {trainer.description}
+                    </p>
                   </div>
                 </article>
               ))}

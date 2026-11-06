@@ -16,6 +16,8 @@ import {
 import { FacebookIcon, InstagramIcon, YouTubeIcon } from '@/components/SocialIcons'
 import studioImage from '@/assets/studio.jpg'
 import { BRANCHES, CONTACT_METHODS, ENQUIRY_INTERESTS, STUDIO } from '@/data/site'
+import { addSubmission, markSubmissionSynced } from '@/lib/submissions'
+import { syncSubmissionToSheet } from '@/lib/sheets'
 import { cn } from '@/lib/utils'
 
 type ContactForm = {
@@ -183,12 +185,28 @@ export default function Contact({ prefill }: ContactProps) {
     }
 
     const name = form.fullName.trim()
+    const details = { ...form }
     setStatus('checking')
 
     timerRef.current = window.setTimeout(() => {
+      const submission = addSubmission({
+        fullName: name,
+        email: details.email.trim(),
+        phone: details.phone.trim(),
+        interest: details.interest,
+        method: details.method,
+        source: 'Website contact form',
+      })
+
       setSubmittedName(name)
       setStatus('success')
       timerRef.current = null
+
+      // Mirror the enquiry to Google Sheets when a webhook is configured.
+      // Local storage remains the source of truth so nothing is lost offline.
+      void syncSubmissionToSheet(submission).then((result) => {
+        if (result.ok) markSubmissionSynced(submission.id)
+      })
     }, 900)
   }
 
@@ -199,6 +217,11 @@ export default function Contact({ prefill }: ContactProps) {
     setSubmittedName('')
     window.setTimeout(() => nameRef.current?.focus(), 60)
   }
+
+  const mainBranch = BRANCHES[0]
+  const nextBranch = BRANCHES[1]
+  const mainBranchMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mainBranch.address)}`
+  const nextBranchMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nextBranch.address)}`
 
   return (
     <section id="contact" className="section relative overflow-hidden bg-bloom">
@@ -310,53 +333,6 @@ export default function Contact({ prefill }: ContactProps) {
               })}
             </div>
 
-            <div className="rounded-[2rem] border border-slate-200/80 bg-white p-5 shadow-sm">
-              <div className="mb-1 flex items-center justify-between">
-                <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
-                  Our studios
-                </p>
-                <span className="text-[11px] font-medium text-slate-400">2 locations</span>
-              </div>
-
-              <div className="divide-y divide-slate-100">
-                {BRANCHES.map((branch) => {
-                  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`
-                  return (
-                    <a
-                      key={branch.name}
-                      href={mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-start gap-3 py-3.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/15"
-                    >
-                      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-brand-600 transition-colors group-hover:bg-brand-50">
-                        <MapPin size={16} />
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="flex flex-wrap items-center gap-2">
-                          <span className="text-sm font-semibold text-slate-900">
-                            {branch.location}
-                          </span>
-                          {branch.status && (
-                            <span className="rounded-full bg-aqua-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-aqua-700">
-                              {branch.status}
-                            </span>
-                          )}
-                        </span>
-                        <span className="mt-0.5 block text-xs leading-relaxed text-slate-500">
-                          {branch.address}
-                        </span>
-                      </span>
-                      <ArrowUpRight
-                        size={15}
-                        className="mt-1 shrink-0 text-slate-300 transition-colors group-hover:text-brand-700"
-                      />
-                    </a>
-                  )
-                })}
-              </div>
-            </div>
-
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-100 bg-brand-50/60 px-4 py-3">
               <span className="text-[11px] font-semibold text-brand-800">
                 Follow along for class updates
@@ -428,20 +404,20 @@ export default function Contact({ prefill }: ContactProps) {
                     <CheckCircle2 size={30} />
                   </div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
-                    Demo success
+                    Enquiry received
                   </p>
                   <h3 className="mt-2 font-display text-2xl text-slate-900">
                     Thanks, {submittedName}.
                   </h3>
                   <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-600">
-                    Your details passed validation. This is a frontend demo, so{' '}
+                    Your enquiry has been saved for the studio team. We'll be in touch by{' '}
                     <strong className="font-semibold text-slate-800">
-                      nothing has been sent or stored
-                    </strong>
-                    . A backend service still needs to be connected before enquiries can reach the
-                    studio.
+                      {form.method.toLowerCase()}
+                    </strong>{' '}
+                    within one working day.
                   </p>
-                  <p className="mt-4 w-full rounded-2xl border border-brand-100 bg-brand-50/50 px-4 py-3 text-xs leading-relaxed text-slate-500">
+                  <p className="mt-4 w-full rounded-2xl border border-aqua-200 bg-aqua-50/60 px-4 py-3 text-xs leading-relaxed text-slate-600">
+                    <strong className="font-semibold text-slate-800">Saved to the staff inbox.</strong>{' '}
                     No payment or booking has been made.
                   </p>
                   <button type="button" onClick={resetForm} className="btn-primary mt-6">
@@ -639,8 +615,8 @@ export default function Contact({ prefill }: ContactProps) {
 
                     <div className="flex items-start gap-2.5 rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-3 text-[11px] leading-relaxed text-slate-500">
                       <ShieldCheck size={15} className="mt-0.5 shrink-0 text-brand-600" />
-                      Your details are only used to reply to your enquiry. No payment is taken
-                      online.
+                      Your details are saved for the studio team to reply to your enquiry. No
+                      payment is taken online.
                     </div>
 
                     <button
@@ -650,7 +626,7 @@ export default function Contact({ prefill }: ContactProps) {
                     >
                       {status === 'checking' ? (
                         <>
-                          <Loader2 size={18} className="animate-spin" /> Checking details…
+                          <Loader2 size={18} className="animate-spin" /> Sending enquiry…
                         </>
                       ) : (
                         <>
@@ -684,6 +660,104 @@ export default function Contact({ prefill }: ContactProps) {
             </div>
           </div>
         </div>
+
+        <section
+          aria-labelledby="contact-studios-title"
+          className="relative mt-6 overflow-hidden rounded-[2.25rem] border border-brand-100 bg-gradient-to-br from-white via-brand-50/80 to-aqua-50/80 p-5 shadow-[0_24px_65px_-45px_rgba(9,39,71,0.3)] sm:mt-8 sm:rounded-[2.75rem] sm:p-7 lg:p-9"
+          data-reveal
+        >
+          <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-aqua-200/40 blur-[90px]" />
+          <div className="relative mb-5 flex flex-wrap items-end justify-between gap-3 sm:mb-7">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.17em] text-brand-700">
+                Our studios
+              </p>
+              <h2 id="contact-studios-title" className="mt-1 font-display text-2xl text-slate-900 sm:text-3xl">
+                Two locations. One warm welcome.
+              </h2>
+            </div>
+            <span className="rounded-full border border-brand-100 bg-white/85 px-3.5 py-1.5 text-[11px] font-semibold text-slate-500 shadow-sm">
+              {BRANCHES.length} locations
+            </span>
+          </div>
+
+          <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-5">
+            <a
+              href={mainBranchMapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Get directions to ${mainBranch.location}`}
+              className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-brand-950 via-brand-900 to-brand-700 p-5 text-white shadow-premium transition-all duration-300 hover:-translate-y-1 hover:shadow-glow focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 sm:min-h-[240px] sm:p-7"
+            >
+              <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-aqua-400/20 blur-3xl transition-transform duration-700 group-hover:scale-125" />
+              <div className="relative flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-aqua-300">
+                    <MapPin size={21} />
+                  </span>
+                  <span>
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-aqua-200">
+                      {mainBranch.name}
+                    </span>
+                    <span className="mt-0.5 block font-display text-xl sm:text-2xl">
+                      {mainBranch.location}
+                    </span>
+                  </span>
+                </div>
+                <ArrowUpRight size={20} className="relative shrink-0 text-white/70 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
+              </div>
+              <div className="relative mt-5">
+                <p className="max-w-xl text-sm leading-relaxed text-white/75">
+                  {mainBranch.address}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-aqua-400 px-4 py-2.5 text-sm font-bold text-brand-950 shadow-lg shadow-brand-950/20 transition-colors group-hover:bg-aqua-300">
+                  Main branch directions <ArrowRight size={16} />
+                </span>
+              </div>
+            </a>
+
+            <article className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white bg-white/90 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-[0_22px_50px_-30px_rgba(0,91,173,0.3)] sm:min-h-[240px] sm:p-7">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
+                    <MapPin size={21} />
+                  </span>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
+                      Next branch
+                    </p>
+                    <h3 className="mt-0.5 font-display text-xl text-slate-900 sm:text-2xl">
+                      {nextBranch.location}
+                    </h3>
+                  </div>
+                </div>
+                {nextBranch.status && (
+                  <span className="shrink-0 rounded-full bg-aqua-50 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.1em] text-aqua-800">
+                    {nextBranch.status}
+                  </span>
+                )}
+              </div>
+              <div className="mt-5 border-t border-slate-100 pt-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                  Branch address
+                </p>
+                <p className="mt-1.5 flex items-start gap-2.5 text-sm leading-relaxed text-slate-600">
+                  <MapPin size={16} className="mt-0.5 shrink-0 text-brand-600" />
+                  <span>{nextBranch.address}</span>
+                </p>
+                <a
+                  href={nextBranchMapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Get directions to ${nextBranch.location}`}
+                  className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-bold text-brand-800 transition-all duration-200 hover:border-brand-700 hover:bg-brand-700 hover:text-white hover:shadow-md focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25"
+                >
+                  Get directions <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </a>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
   )

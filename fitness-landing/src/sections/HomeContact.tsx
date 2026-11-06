@@ -21,7 +21,7 @@ export default function HomeContact() {
   return (
     <section
       aria-labelledby="home-contact-title"
-      className="relative overflow-hidden bg-bloom px-5 py-16 sm:px-8 sm:py-20 lg:px-12"
+      className="relative overflow-hidden bg-Her Space px-5 py-16 sm:px-8 sm:py-20 lg:px-12"
     >
       <div
         aria-hidden="true"

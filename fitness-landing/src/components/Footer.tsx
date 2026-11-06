@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ArrowUpRight,
+  LockKeyhole,
   Mail,
   MapPin,
   Phone,
@@ -8,7 +9,7 @@ import {
 } from 'lucide-react'
 import { FacebookIcon, InstagramIcon, YouTubeIcon } from '@/components/SocialIcons'
 import { NAV_LINKS, STUDIO } from '@/data/site'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 type LegalDocument = 'privacy' | 'terms' | null
 
@@ -187,7 +188,7 @@ export default function Footer() {
           <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-brand-200/60 lg:flex-row">
             <p>© 2026 {STUDIO.name}. All rights reserved.</p>
             <p className="order-3 lg:order-2">Made for women</p>
-            <div className="order-2 flex gap-5 lg:order-3">
+            <div className="order-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:order-3">
               <button
                 type="button"
                 onClick={() => setLegal('privacy')}
@@ -202,6 +203,12 @@ export default function Footer() {
               >
                 Terms &amp; Conditions
               </button>
+              <Link
+                to="/staff"
+                className="inline-flex items-center gap-1 font-semibold text-brand-200/80 transition-colors hover:text-white focus:outline-none focus-visible:text-white"
+              >
+                <LockKeyhole size={12} /> Staff login
+              </Link>
             </div>
           </div>
         </div>
@@ -224,7 +231,7 @@ export default function Footer() {
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
-                  Bloom Studio
+                  Her Space Studio
                 </p>
                 <h2 id="legal-title" className="font-display text-2xl text-slate-900">
                   {legal === 'privacy' ? 'Privacy Policy' : 'Terms & Conditions'}
@@ -244,17 +251,15 @@ export default function Footer() {
             {legal === 'privacy' ? (
               <div className="space-y-4 text-sm leading-relaxed">
                 <p>
-                  This is a demo privacy notice for development. Bloom Studio does not collect,
-                  send or store any information submitted through this website until a backend
-                  service is connected.
+                  When you send an enquiry, the details you provide — your name, email address,
+                  phone number, program interest and preferred contact method — are kept for the
+                  studio team to review. If spreadsheet sync is enabled, the enquiry is also copied
+                  to the studio's private Google Sheet.
                 </p>
                 <p>
-                  When a backend is connected, this policy should explain what personal details
-                  are collected through enquiry forms, why they are needed, how long they are
-                  kept, and how members can request access or deletion.
-                </p>
-                <p>
-                  Questions about privacy can be sent to{' '}
+                  Your details are used only to respond to your enquiry. They are not sold or shared
+                  with third parties. You can ask the studio to access or delete your enquiry at any
+                  time by emailing{' '}
                   <a href={`mailto:${STUDIO.email}`} className="font-semibold text-brand-700">
                     {STUDIO.email}
                   </a>

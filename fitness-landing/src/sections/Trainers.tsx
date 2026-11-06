@@ -1,4 +1,4 @@
-import { ArrowRight, Award, Sparkles } from 'lucide-react'
+import { ArrowRight, Award } from 'lucide-react'
 import SectionHeading from '@/components/SectionHeading'
 import { TRAINERS } from '@/data/trainers'
 
@@ -19,7 +19,7 @@ export default function Trainers({ onEnquire }: TrainersProps) {
               <span className="italic text-gradient">without the ego.</span>
             </>
           }
-          description="Warm, precise and endlessly encouraging. Our coaches remember your goals, notice the small wins and help you move with confidence."
+          description="Meet the women leading your classes, from yoga expertise to encouraging, all-level fitness coaching."
         />
 
         <div
@@ -35,56 +35,39 @@ export default function Trainers({ onEnquire }: TrainersProps) {
               <div className="relative aspect-[4/5] overflow-hidden">
                 <img
                   src={trainer.image}
-                  alt={`${trainer.name}, ${trainer.specialty} coach at Bloom Studio`}
+                  alt={`${trainer.name}, ${trainer.role} at Her Space Fitness Studio`}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="h-full w-full scale-[0.96] object-cover transition-transform duration-700 group-hover:scale-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-950/65 via-brand-950/5 to-transparent" />
                 <div className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-brand-800 backdrop-blur">
-                  <Award size={12} /> {trainer.experience}
+                  <Award size={12} /> Trainer
                 </div>
                 <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-100/90">
-                    {trainer.role}
-                  </p>
                   <h3 className="font-display text-2xl leading-tight text-white">{trainer.name}</h3>
                 </div>
               </div>
 
               <div className="flex flex-1 flex-col p-5">
-                <p className="mb-3 text-sm font-semibold text-brand-700">{trainer.specialty}</p>
-                <p className="flex-1 text-sm leading-relaxed text-slate-600">{trainer.bio}</p>
-
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {trainer.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-brand-100 bg-brand-50 px-2.5 py-1 text-[10px] font-semibold text-brand-700"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
+                <p className="flex-1 text-sm font-semibold leading-relaxed text-brand-700">
+                  {trainer.role}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  {trainer.description}
+                </p>
                 <button
                   type="button"
                   onClick={() => onEnquire('Personal Training')}
                   className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-900 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/15"
                   aria-label={`Book a session with ${trainer.name}`}
                 >
-                  Book a session <ArrowRight size={15} />
+                  Ask about classes <ArrowRight size={15} />
                 </button>
               </div>
             </article>
           ))}
         </div>
 
-        <p
-          className="mt-8 flex items-center justify-center gap-2 text-center text-xs text-slate-400"
-          data-reveal
-        >
-          <Sparkles size={13} /> Trainer profiles are sample content for development.
-        </p>
       </div>
     </section>
   )

@@ -10,6 +10,7 @@ import Statistics from '@/sections/Statistics'
 import Membership from '@/sections/Membership'
 import Wellness from '@/sections/Wellness'
 import Testimonials from '@/sections/Testimonials'
+import Blog from '@/sections/Blog'
 import HomeContact from '@/sections/HomeContact'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 
@@ -39,6 +40,7 @@ export default function Home() {
         <Membership onEnquire={handleEnquire} />
         <Wellness />
         <Testimonials />
+        <Blog />
         <HomeContact />
       </main>
 

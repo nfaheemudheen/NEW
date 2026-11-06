@@ -1,9 +1,4 @@
-import amaraImage from '@/assets/trainer-amara.jpg'
-import mayaImage from '@/assets/trainer-maya.jpg'
-import sofiaImage from '@/assets/trainer-sofia.jpg'
-import leilaImage from '@/assets/trainer-leila.jpg'
-
-export type Trainer = {
+export type ManagementMember = {
   id: string
   name: string
   role: string
@@ -11,48 +6,64 @@ export type Trainer = {
   experience: string
   bio: string
   image: string
-  tags: string[]
 }
+
+export type Trainer = {
+  id: string
+  name: string
+  role: string
+  description: string
+  image: string
+}
+
+export const MANAGEMENT_TEAM: ManagementMember[] = [
+  {
+    id: 'ranjitha',
+    name: 'Ranjitha Arunkumar',
+    role: 'Fitness Coach | Nutritionist',
+    specialty: 'Yoga & Mobility',
+    experience: '4 years',
+    bio: 'Ranjitha brings fitness coaching and practical nutrition guidance together, with a thoughtful focus on mobility and steady strength.',
+    image: '/image2.webp',
+  },
+  {
+    id: 'shanthi',
+    name: 'Shanthi Kasiraj',
+    role: 'Fitness Coach | Nutritionist | Social Media Influencer',
+    specialty: 'Strength & Conditioning',
+    experience: '4 years',
+    bio: 'Shanthi combines fitness coaching and nutrition guidance with an encouraging online presence that helps women feel supported in their wellness journey.',
+    image: '/iamge1.webp',
+  },
+]
 
 export const TRAINERS: Trainer[] = [
   {
-    id: 'amara',
-    name: 'Amara Okafor',
-    role: 'Founder & Head Coach',
-    specialty: 'Strength & Conditioning',
-    experience: '12+ years',
-    bio: 'Amara built Bloom around one belief: every woman deserves a room where she can take up space. Her coaching is precise, patient and quietly powerful.',
-    image: amaraImage,
-    tags: ['Strength', 'Pre & postnatal'],
+    id: 'vilva',
+    name: 'Vilva',
+    role: 'International Yoga Champion & Fitness Trainer',
+    description: 'Brings champion-level yoga experience to sessions that build balance, flexibility and confidence.',
+    image: '/iamge3.webp',
   },
   {
-    id: 'maya',
-    name: 'Maya Chen',
-    role: 'Yoga & Mobility Coach',
-    specialty: 'Yoga & Mobility',
-    experience: '8 years',
-    bio: 'Maya blends breathwork, mobility and slow strength. Her classes are an invitation to move gently, breathe deeper and come home to your body.',
-    image: mayaImage,
-    tags: ['Yoga', 'Mobility'],
+    id: 'monisha',
+    name: 'Monisha',
+    role: 'Fitness Trainer',
+    description: 'Helps members build strength and consistency with supportive, approachable coaching.',
+    image: '/image4.webp',
   },
   {
-    id: 'sofia',
-    name: 'Sofia Reyes',
-    role: 'Weight Management Coach',
-    specialty: 'Weight Management',
-    experience: '7 years',
-    bio: 'Sofia helps members build habits that last. No crash diets, no guilt — just practical nutrition, steady progress and a lot of encouragement.',
-    image: sofiaImage,
-    tags: ['Nutrition', 'Habits'],
+    id: 'joshlin',
+    name: 'Joshlin',
+    role: 'Fitness Trainer',
+    description: 'Creates an encouraging space to move, learn and grow stronger at your own pace.',
+    image: '/image5.webp',
   },
   {
-    id: 'leila',
-    name: 'Leila Hassan',
-    role: 'Functional Fitness Coach',
-    specialty: 'Functional Fitness',
-    experience: '6 years',
-    bio: 'Leila trains movement that carries into real life: carrying, climbing, lifting and playing. Expect smart progressions and a very good playlist.',
-    image: leilaImage,
-    tags: ['Functional', 'Conditioning'],
+    id: 'shobana',
+    name: 'Shobana',
+    role: 'Fitness Trainer',
+    description: 'Supports members as they make movement a positive and steady part of everyday life.',
+    image: '/image6.webp',
   },
 ]

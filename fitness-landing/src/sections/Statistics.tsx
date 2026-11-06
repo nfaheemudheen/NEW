@@ -31,7 +31,7 @@ export default function Statistics() {
               <span className="block italic text-gradient">Big momentum.</span>
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 md:text-lg">
-              Stronger together, one class at a time. Here is a snapshot of the Bloom community and
+              Stronger together, one class at a time. Here is a snapshot of the Her Space community and
               the women who make it what it is.
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function Statistics() {
 
           <div className="relative mb-5 flex items-center justify-between gap-4 sm:mb-7">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-aqua-300 sm:text-xs">
-              Bloom by the numbers
+              Her Space by the numbers
             </p>
             <span className="hidden items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-semibold text-white/70 sm:inline-flex">
               <span className="h-1.5 w-1.5 rounded-full bg-aqua-400" /> Community in motion

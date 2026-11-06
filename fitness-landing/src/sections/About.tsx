@@ -63,7 +63,7 @@ const ABOUT_FEATURES = [
   {
     category: 'THE STUDIO',
     image: studioImage,
-    imageAlt: 'Bloom Studio ready for a welcoming group class',
+    imageAlt: 'Her Space Studio ready for a welcoming group class',
     title: 'A place that feels like yours',
     description: 'A bright, comfortable space to focus on your own progress.',
   },
@@ -82,18 +82,18 @@ export default function About() {
       <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-brand-100 bg-white/80 py-7 shadow-[0_24px_80px_-52px_rgba(9,39,71,0.34)] sm:rounded-[2.5rem] sm:py-10 lg:py-12">
         <header className="mx-auto mb-8 max-w-3xl px-5 text-center sm:mb-10 sm:px-8" data-reveal>
           <div className="section-badge mx-auto mb-4 w-fit">
-            <Flower2 size={14} /> ABOUT BLOOM
+            <Flower2 size={14} /> ABOUT Her Space
           </div>
           <h2 className="font-display text-3xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
             Find your rhythm. <span className="text-brand-700">Feel at home.</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base sm:leading-7">
-            Discover the people, classes and thoughtful details that make Bloom a place to keep
+            Discover the people, classes and thoughtful details that make Her Space a place to keep
             growing stronger.
           </p>
         </header>
 
-        <div className="about-marquee-viewport" aria-label="Explore Bloom features">
+        <div className="about-marquee-viewport" aria-label="Explore Her Space features">
           <div className="about-marquee-track">
             {[false, true].map((isDuplicate) => (
               <div
@@ -149,7 +149,7 @@ export default function About() {
             to="/about"
             className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-800 px-5 py-3 text-sm font-bold text-white shadow-md shadow-brand-900/15 transition duration-300 hover:-translate-y-0.5 hover:bg-brand-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 sm:w-auto"
           >
-            Get to know Bloom
+            Get to know Her Space
             <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>

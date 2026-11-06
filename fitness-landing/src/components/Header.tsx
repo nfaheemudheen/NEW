@@ -5,7 +5,15 @@ import { useLocation } from 'react-router-dom'
 import { NAV_LINKS, STUDIO } from '@/data/site'
 import { cn } from '@/lib/utils'
 
-const HEADER_LINKS = NAV_LINKS.filter((link) => link.id !== 'membership')
+const HEADER_LINKS = NAV_LINKS.filter(
+  (link) => link.id !== 'membership' && link.id !== 'programs',
+).flatMap((link) =>
+  link.id === 'services'
+    ? [link, { label: 'Diet Plans', id: 'diet-plans' }, { label: 'Blog', id: 'blog' }]
+    : [link],
+)
+
+const BLOG_URL = 'https://herspacefitness.com/blog/'
 
 type HeaderProps = {
   onJoin: () => void
@@ -29,7 +37,7 @@ export default function Header({ onJoin }: HeaderProps) {
       let current = 'home'
 
       for (const link of HEADER_LINKS) {
-        if (link.id === 'about' || link.id === 'contact' || link.id === 'faqs') continue
+        if (link.id === 'about' || link.id === 'contact' || link.id === 'faqs' || link.id === 'blog') continue
         const section = document.getElementById(link.id)
         if (!section) continue
         const top = section.getBoundingClientRect().top + window.scrollY
@@ -105,16 +113,20 @@ export default function Header({ onJoin }: HeaderProps) {
   }
 
   const navHref = (id: string) => {
+    if (id === 'blog') return BLOG_URL
     if (id === 'about') return '/about'
     if (id === 'services') return '/services'
+    if (id === 'diet-plans') return '/diet-plans'
     if (id === 'contact') return '/contact'
     if (id === 'faqs') return '/faqs'
     if (id === 'home') return '/'
     return location.pathname === '/' ? `#${id}` : `/#${id}`
   }
   const isNavActive = (id: string) => {
+    if (id === 'blog') return false
     if (location.pathname === '/about') return id === 'about'
     if (location.pathname.startsWith('/services')) return id === 'services'
+    if (location.pathname === '/diet-plans') return id === 'diet-plans'
     if (location.pathname === '/contact') return id === 'contact'
     if (location.pathname === '/faqs') return id === 'faqs'
     if (id === 'about' || id === 'contact' || id === 'faqs') return false
@@ -122,7 +134,14 @@ export default function Header({ onJoin }: HeaderProps) {
   }
   const navCurrent = (id: string) => {
     if (!isNavActive(id)) return undefined
-    return id === 'home' || id === 'about' || id === 'services' || id === 'contact' || id === 'faqs'
+    return (
+      id === 'home' ||
+      id === 'about' ||
+      id === 'services' ||
+      id === 'diet-plans' ||
+      id === 'contact' ||
+      id === 'faqs'
+    )
       ? 'page'
       : 'location'
   }
@@ -141,26 +160,28 @@ export default function Header({ onJoin }: HeaderProps) {
           <a
             href="/"
             onClick={() => setOpen(false)}
-            className="flex shrink-0 items-center rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20"
+            className="group flex shrink-0 items-center rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20"
             aria-label="Her Space Fitness Studio home"
           >
             <img
               src="/logo2.png"
               alt="Her Space Fitness Studio"
-              className="h-14 w-14 object-contain"
+              className="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </a>
 
-          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main navigation">
+          <nav className="hidden items-center gap-1 rounded-full border border-slate-200/70 bg-white/55 p-1 shadow-sm backdrop-blur-sm lg:flex" aria-label="Main navigation">
             {HEADER_LINKS.map((link) => (
               <a
                 key={link.id}
                 href={navHref(link.id)}
                 aria-current={navCurrent(link.id)}
                 className={cn(
-                  'rounded-full px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/15',
-                  isNavActive(link.id) && 'bg-brand-50 font-semibold text-brand-800',
+                  'group relative rounded-full px-3.5 py-2.5 text-base font-semibold text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-brand-800 hover:shadow-[0_8px_18px_-12px_rgba(0,91,173,0.65)] focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/15 after:absolute after:bottom-1.5 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-gradient-to-r after:from-brand-600 after:to-aqua-500 after:transition-all after:duration-300 after:content-[\'\'] hover:after:w-1/2',
+                  isNavActive(link.id) && 'bg-brand-50/90 text-brand-900 after:w-1/2',
                 )}
+                target={link.id === 'blog' ? '_blank' : undefined}
+                rel={link.id === 'blog' ? 'noopener noreferrer' : undefined}
               >
                 {link.label}
               </a>
@@ -171,9 +192,9 @@ export default function Header({ onJoin }: HeaderProps) {
             <button
               type="button"
               onClick={handleJoin}
-              className="btn-primary w-auto whitespace-nowrap px-5 py-2.5 text-sm"
+              className="btn-primary group w-auto whitespace-nowrap px-5 py-2.5 text-base"
             >
-              Join Now <ArrowRight size={16} />
+              Join Now <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
             </button>
           </div>
 
@@ -218,7 +239,7 @@ export default function Header({ onJoin }: HeaderProps) {
             >
               <div className="mb-6">
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-700">
-                  Explore Bloom
+                  Explore Her Space
                 </span>
               </div>
 
@@ -230,9 +251,11 @@ export default function Header({ onJoin }: HeaderProps) {
                     onClick={() => setOpen(false)}
                     aria-current={navCurrent(link.id)}
                     className={cn(
-                      'block rounded-2xl px-4 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand-800',
-                      isNavActive(link.id) && 'bg-brand-50 font-semibold text-brand-800',
+                      'block rounded-2xl border border-transparent px-4 py-3.5 text-lg font-semibold text-slate-700 transition-all duration-200 hover:translate-x-1 hover:border-brand-100 hover:bg-brand-50 hover:text-brand-800 hover:shadow-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/15',
+                      isNavActive(link.id) && 'border-brand-100 bg-brand-50 text-brand-900',
                     )}
+                    target={link.id === 'blog' ? '_blank' : undefined}
+                    rel={link.id === 'blog' ? 'noopener noreferrer' : undefined}
                   >
                     {link.label}
                   </a>

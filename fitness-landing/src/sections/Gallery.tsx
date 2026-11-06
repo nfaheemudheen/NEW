@@ -93,7 +93,7 @@ export default function Gallery() {
             <>
               A little look
               <br />
-              <span className="italic text-gradient">around Bloom.</span>
+              <span className="italic text-gradient">around Her Space.</span>
             </>
           }
           description="Sunlit corners, shared sweat and the small moments between sets. This is what a women-only studio feels like."

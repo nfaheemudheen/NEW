@@ -1,5 +1,5 @@
 export const STUDIO = {
-  name: 'Bloom Studio',
+  name: 'Her Space Studio',
   tagline: "A women-only fitness studio for strength, wellness and everything in between.",
   phone: '+91 72008 17377',
   phoneHref: 'tel:+917200817377',

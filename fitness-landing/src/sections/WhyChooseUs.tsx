@@ -46,7 +46,7 @@ export default function WhyChooseUs() {
       <div className="section relative mx-auto max-w-7xl">
         <div className="mx-auto max-w-3xl text-center" data-reveal>
           <div className="section-badge border-brand-200 bg-brand-50 text-brand-800">
-            <Flower2 size={14} className="text-brand-600" /> Why Bloom
+            <Flower2 size={14} className="text-brand-600" /> Why Her Space
           </div>
           <h2 className="section-title !mb-4">
             Made for the way
@@ -107,7 +107,7 @@ export default function WhyChooseUs() {
                 A room full of women growing stronger together.
               </p>
               <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-200">
-                The Bloom promise
+                The Her Space promise
               </p>
             </div>
           </div>

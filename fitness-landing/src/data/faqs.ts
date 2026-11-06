@@ -7,7 +7,7 @@ export const FAQS: Faq[] = [
   {
     question: 'Is the fitness studio exclusively for women?',
     answer:
-      'Yes. Bloom is a women-only space, created so you can train, stretch and ask questions without judgement. Members of every age, body type and fitness level are welcome.',
+      'Yes. Her Space is a women-only space, created so you can train, stretch and ask questions without judgement. Members of every age, body type and fitness level are welcome.',
   },
   {
     question: 'Do beginners need prior workout experience?',

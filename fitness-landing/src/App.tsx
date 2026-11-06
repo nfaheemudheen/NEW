@@ -6,6 +6,8 @@ import ContactPage from '@/pages/ContactPage'
 import FaqPage from '@/pages/FaqPage'
 import DietPlansPage from '@/pages/DietPlansPage'
 import ServicesPage, { ServicesClassPage } from '@/pages/ServicesPage'
+import StaffLogin from '@/pages/StaffLogin'
+import StaffDashboard from '@/pages/StaffDashboard'
 import NotFound from '@/pages/NotFound'
 import AmbientBackground from '@/components/AmbientBackground'
 
@@ -46,6 +48,8 @@ function App() {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/services/offline" element={<ServicesClassPage mode="offline" />} />
           <Route path="/services/online" element={<ServicesClassPage mode="online" />} />
+          <Route path="/staff/login" element={<StaffLogin />} />
+          <Route path="/staff" element={<StaffDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
