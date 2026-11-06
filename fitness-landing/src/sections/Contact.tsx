@@ -17,7 +17,7 @@ import { FacebookIcon, InstagramIcon, YouTubeIcon } from '@/components/SocialIco
 import studioImage from '@/assets/studio.jpg'
 import { BRANCHES, CONTACT_METHODS, ENQUIRY_INTERESTS, STUDIO } from '@/data/site'
 import { addSubmission, markSubmissionSynced } from '@/lib/submissions'
-import { syncSubmissionToSheet } from '@/lib/sheets'
+import { createSubmissionOnBackend } from '@/lib/sheets'
 import { cn } from '@/lib/utils'
 
 type ContactForm = {
@@ -138,6 +138,7 @@ export default function Contact({ prefill }: ContactProps) {
   const [errors, setErrors] = useState<ContactErrors>({})
   const [status, setStatus] = useState<FormStatus>('idle')
   const [submittedName, setSubmittedName] = useState('')
+  const [submissionWarning, setSubmissionWarning] = useState('')
   const timerRef = useRef<number | null>(null)
   const nameRef = useRef<HTMLInputElement>(null)
   const successRef = useRef<HTMLDivElement>(null)
@@ -189,24 +190,30 @@ export default function Contact({ prefill }: ContactProps) {
     setStatus('checking')
 
     timerRef.current = window.setTimeout(() => {
-      const submission = addSubmission({
-        fullName: name,
-        email: details.email.trim(),
-        phone: details.phone.trim(),
-        interest: details.interest,
-        method: details.method,
-        source: 'Website contact form',
-      })
+      void (async () => {
+        const submission = addSubmission({
+          fullName: name,
+          email: details.email.trim(),
+          phone: details.phone.trim(),
+          interest: details.interest,
+          method: details.method,
+          source: 'Website contact form',
+        })
 
-      setSubmittedName(name)
-      setStatus('success')
-      timerRef.current = null
+        timerRef.current = null
 
-      // Mirror the enquiry to Google Sheets when a webhook is configured.
-      // Local storage remains the source of truth so nothing is lost offline.
-      void syncSubmissionToSheet(submission).then((result) => {
-        if (result.ok) markSubmissionSynced(submission.id)
-      })
+        const result = await createSubmissionOnBackend(submission)
+        if (result.ok) {
+          markSubmissionSynced(submission.id)
+          setSubmissionWarning('')
+        } else {
+          setSubmissionWarning(
+            'Your enquiry is saved in this browser, but could not reach the studio spreadsheet. Please contact the studio directly or try again later.',
+          )
+        }
+        setSubmittedName(name)
+        setStatus('success')
+      })()
     }, 900)
   }
 
@@ -215,6 +222,7 @@ export default function Contact({ prefill }: ContactProps) {
     setErrors({})
     setStatus('idle')
     setSubmittedName('')
+    setSubmissionWarning('')
     window.setTimeout(() => nameRef.current?.focus(), 60)
   }
 
@@ -416,9 +424,9 @@ export default function Contact({ prefill }: ContactProps) {
                     </strong>{' '}
                     within one working day.
                   </p>
-                  <p className="mt-4 w-full rounded-2xl border border-aqua-200 bg-aqua-50/60 px-4 py-3 text-xs leading-relaxed text-slate-600">
-                    <strong className="font-semibold text-slate-800">Saved to the staff inbox.</strong>{' '}
-                    No payment or booking has been made.
+                  <p className={cn('mt-4 w-full rounded-2xl border px-4 py-3 text-xs leading-relaxed', submissionWarning ? 'border-amber-200 bg-amber-50 text-amber-900' : 'border-aqua-200 bg-aqua-50/60 text-slate-600')}>
+                    <strong className="font-semibold text-slate-800">{submissionWarning ? 'Spreadsheet sync needs attention.' : 'Saved to the staff inbox and spreadsheet.'}</strong>{' '}
+                    {submissionWarning || 'No payment or booking has been made.'}
                   </p>
                   <button type="button" onClick={resetForm} className="btn-primary mt-6">
                     Send another <ArrowRight size={17} />

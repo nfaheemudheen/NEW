@@ -1,453 +1,246 @@
+import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto'
+import express from 'express'
+import { google } from 'googleapis'
 
-require("dotenv").config();
+const required = ['GOOGLE_SHEET_ID', 'GOOGLE_SERVICE_ACCOUNT_EMAIL', 'GOOGLE_PRIVATE_KEY', 'ADMIN_USERNAME', 'ADMIN_PASSWORD']
+const missing = required.filter((key) => !process.env[key])
+if (missing.length) throw new Error(`Missing required environment variables: ${missing.join(', ')}`)
 
-const express = require("express");
-const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const { google } = require("googleapis");
-const { randomUUID } = require("crypto");
+const app = express()
+const port = Number(process.env.PORT || 10000)
+const sheetId = process.env.GOOGLE_SHEET_ID.trim()
+const allowedOrigins = new Set(
+  (process.env.FRONTEND_ORIGIN || 'https://new-kappa-sand-18.vercel.app')
+    .split(',').map((origin) => origin.trim()).filter(Boolean),
+)
+const adminUsername = process.env.ADMIN_USERNAME.trim()
+const adminPassword = process.env.ADMIN_PASSWORD
+const tokenSecret = process.env.ADMIN_TOKEN_SECRET || process.env.ADMIN_PASSWORD
+const sheetTab = process.env.GOOGLE_SHEET_TAB || 'Submissions'
+const headers = ['Submission ID', 'Received (ISO)', 'Name', 'Email', 'Phone', 'Interested in', 'Preferred contact', 'Source', 'Status', 'Notes', 'Synced to Google Sheets']
+const statuses = new Set(['new', 'contacted', 'booked', 'archived'])
+const loginAttempts = new Map()
+const enquiryAttempts = new Map()
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-const SHEET_ID = process.env.GOOGLE_SHEET_ID;
-const SHEET_NAME = "Submissions";
-
-const HEADERS = [
-  "id",
-  "fullName",
-  "email",
-  "phone",
-  "interest",
-  "method",
-  "source",
-  "status",
-  "notes",
-  "createdAt",
-];
-
-const STATUSES = ["new", "contacted", "booked", "archived"];
-
-app.use(express.json({ limit: "100kb" }));
-
-app.use(
-  cors({
-    origin: [
-      process.env.FRONTEND_URL,
-      "http://localhost:5173",
-    ].filter(Boolean),
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// Google Sheets authentication
-const googleAuth = new google.auth.JWT(
-  process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-  null,
-  process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-  ["https://www.googleapis.com/auth/spreadsheets"]
-);
-
-const sheets = google.sheets({
-  version: "v4",
-  auth: googleAuth,
-});
-
-// Get the sheet tab ID and create the tab if necessary.
-async function getSheetTabId() {
-  if (!SHEET_ID) {
-    throw new Error("GOOGLE_SHEET_ID is missing.");
+app.disable('x-powered-by')
+app.set('trust proxy', 1)
+app.use((req, res, next) => {
+  const origin = req.get('origin')
+  if (!origin || allowedOrigins.has(origin) || (process.env.NODE_ENV !== 'production' && /^http:\/\/localhost:\d+$/.test(origin))) {
+    if (origin) res.setHeader('Access-Control-Allow-Origin', origin)
+    res.setHeader('Vary', 'Origin')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    if (req.method === 'OPTIONS') return res.sendStatus(204)
+    return next()
   }
+  return res.status(403).json({ error: 'Origin is not allowed.' })
+})
+app.use(express.json({ limit: '32kb' }))
 
-  const spreadsheet = await sheets.spreadsheets.get({
-    spreadsheetId: SHEET_ID,
-    fields: "sheets.properties",
-  });
+const auth = new google.auth.GoogleAuth({
+  credentials: {
+    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  },
+  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+})
+const sheets = google.sheets({ version: 'v4', auth })
 
-  let sheet = spreadsheet.data.sheets?.find(
-    (item) => item.properties.title === SHEET_NAME
-  );
-
-  if (!sheet) {
-    const created = await sheets.spreadsheets.batchUpdate({
-      spreadsheetId: SHEET_ID,
-      requestBody: {
-        requests: [
-          {
-            addSheet: {
-              properties: {
-                title: SHEET_NAME,
-              },
-            },
-          },
-        ],
-      },
-    });
-
-    sheet = created.data.replies?.[0]?.addSheet;
-  }
-
-  if (!sheet?.properties?.sheetId && sheet?.properties?.sheetId !== 0) {
-    throw new Error("Could not find or create the Submissions sheet.");
-  }
-
-  return sheet.properties.sheetId;
+function safeEqual(a, b) {
+  const left = Buffer.from(String(a))
+  const right = Buffer.from(String(b))
+  return left.length === right.length && timingSafeEqual(left, right)
 }
 
-// Ensure the first row contains the expected column headers.
-async function ensureSheetReady() {
-  const sheetId = await getSheetTabId();
-
-  const result = await sheets.spreadsheets.values.get({
-    spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A1:J1`,
-  });
-
-  const currentHeaders = result.data.values?.[0] || [];
-
-  if (currentHeaders.join("|") !== HEADERS.join("|")) {
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A1:J1`,
-      valueInputOption: "RAW",
-      requestBody: {
-        values: [HEADERS],
-      },
-    });
-  }
-
-  return sheetId;
+function issueToken(username) {
+  const expiresAt = Date.now() + 12 * 60 * 60 * 1000
+  const payload = Buffer.from(JSON.stringify({ sub: username, exp: expiresAt })).toString('base64url')
+  const signature = createHmac('sha256', tokenSecret).update(payload).digest('base64url')
+  return { token: `${payload}.${signature}`, expiresAt: new Date(expiresAt).toISOString() }
 }
 
-function rowToSubmission(row) {
-  return {
-    id: String(row[0] || ""),
-    fullName: String(row[1] || ""),
-    email: String(row[2] || ""),
-    phone: String(row[3] || ""),
-    interest: String(row[4] || "General enquiry"),
-    method: String(row[5] || "Email"),
-    source: String(row[6] || "Website enquiry form"),
-    status: STATUSES.includes(row[7]) ? row[7] : "new",
-    notes: String(row[8] || ""),
-    createdAt: String(row[9] || new Date().toISOString()),
-    syncedToSheet: true,
-    isSample: false,
-  };
-}
-
-function submissionToRow(item) {
-  return [
-    item.id,
-    item.fullName,
-    item.email,
-    item.phone,
-    item.interest,
-    item.method,
-    item.source,
-    item.status,
-    item.notes,
-    item.createdAt,
-  ];
-}
-
-async function getAllRows() {
-  await ensureSheetReady();
-
-  const result = await sheets.spreadsheets.values.get({
-    spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A2:J`,
-  });
-
-  return result.data.values || [];
-}
-
-async function findSubmissionRow(id) {
-  const rows = await getAllRows();
-
-  const index = rows.findIndex((row) => String(row[0]) === String(id));
-
-  return index === -1 ? null : index + 2;
-}
-
-// Health check
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Her Space API is running",
-  });
-});
-
-// Admin login
-app.post("/api/admin/login", (req, res) => {
-  const { username, password } = req.body || {};
-
-  if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD || !process.env.JWT_SECRET) {
-    return res.status(500).json({
-      success: false,
-      message: "Admin authentication is not configured.",
-    });
-  }
-
-  if (
-    typeof username !== "string" ||
-    typeof password !== "string" ||
-    username.trim().toLowerCase() !==
-      process.env.ADMIN_USERNAME.trim().toLowerCase() ||
-    password !== process.env.ADMIN_PASSWORD
-  ) {
-    return res.status(401).json({
-      success: false,
-      message: "Incorrect username or password.",
-    });
-  }
-
-  const token = jwt.sign(
-    {
-      role: "admin",
-      username: process.env.ADMIN_USERNAME,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "8h" }
-  );
-
-  res.json({
-    success: true,
-    token,
-    user: {
-      username: process.env.ADMIN_USERNAME,
-      name: process.env.ADMIN_NAME || "Her Space Admin",
-      role: "Admin",
-    },
-    expiresIn: 8 * 60 * 60 * 1000,
-  });
-});
-
-// Verify staff authentication
-function verifyAdmin(req, res, next) {
+function requireStaff(req, res, next) {
+  const token = (req.get('authorization') || '').replace(/^Bearer\s+/i, '')
+  const [payload, signature] = token.split('.')
+  if (!payload || !signature) return res.status(401).json({ error: 'Please sign in again.' })
+  const expected = createHmac('sha256', tokenSecret).update(payload).digest('base64url')
+  if (!safeEqual(signature, expected)) return res.status(401).json({ error: 'Invalid staff session.' })
   try {
-    const header = req.headers.authorization || "";
-    const [scheme, token] = header.split(" ");
-
-    if (scheme !== "Bearer" || !token) {
-      return res.status(401).json({
-        success: false,
-        message: "Please sign in again.",
-      });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (decoded.role !== "admin") {
-      throw new Error("Invalid role");
-    }
-
-    req.admin = decoded;
-    next();
+    const session = JSON.parse(Buffer.from(payload, 'base64url').toString())
+    if (session.sub !== adminUsername || session.exp <= Date.now()) throw new Error('expired')
+    req.staff = session
+    return next()
   } catch {
-    return res.status(401).json({
-      success: false,
-      message: "Your session has expired. Please sign in again.",
-    });
+    return res.status(401).json({ error: 'Staff session expired. Please sign in again.' })
   }
 }
 
-// Public website: save a new enquiry.
-app.post("/api/submissions", async (req, res) => {
-  try {
-    const body = req.body || {};
+function clean(value, max = 1000) {
+  return String(value ?? '').trim().slice(0, max)
+}
 
-    const fullName =
-      typeof body.fullName === "string" ? body.fullName.trim() : "";
-    const email =
-      typeof body.email === "string" ? body.email.trim() : "";
-    const phone =
-      typeof body.phone === "string" ? body.phone.trim() : "";
-    const interest =
-      typeof body.interest === "string" ? body.interest.trim() : "";
-    const method =
-      typeof body.method === "string" ? body.method.trim() : "";
+function normalizeStatus(value) {
+  const status = clean(value, 20).toLowerCase()
+  return statuses.has(status) ? status : 'new'
+}
 
-    if (!fullName || !email || !phone || !interest || !method) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide all required enquiry details.",
-      });
-    }
-
-    const submission = {
-      id: randomUUID(),
-      fullName,
-      email,
-      phone,
-      interest,
-      method,
-      source: "Website enquiry form",
-      status: "new",
-      notes: "",
-      createdAt: new Date().toISOString(),
-    };
-
-    await ensureSheetReady();
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A:J`,
-      valueInputOption: "RAW",
-      insertDataOption: "INSERT_ROWS",
-      requestBody: {
-        values: [submissionToRow(submission)],
-      },
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Your enquiry has been received successfully.",
-      submission: {
-        ...submission,
-        syncedToSheet: true,
-        isSample: false,
-      },
-    });
-  } catch (error) {
-    console.error("Enquiry save error:", error.message);
-
-    res.status(500).json({
-      success: false,
-      message: "We could not submit your enquiry. Please try again.",
-    });
+function rowToSubmission(row = []) {
+  return {
+    id: clean(row[0], 120),
+    createdAt: row[1] ? new Date(row[1]).toISOString() : new Date().toISOString(),
+    fullName: clean(row[2]), email: clean(row[3]), phone: clean(row[4]),
+    interest: clean(row[5]) || 'General enquiry', method: clean(row[6]) || 'Email',
+    source: clean(row[7]) || 'Google Sheet', status: normalizeStatus(row[8]),
+    notes: clean(row[9]), syncedToSheet: true,
   }
-});
+}
 
-// Staff: fetch all enquiries.
-app.get("/api/admin/submissions", verifyAdmin, async (req, res) => {
-  try {
-    const rows = await getAllRows();
-
-    res.json({
-      success: true,
-      submissions: rows
-        .filter((row) => row[0] && row[1])
-        .map(rowToSubmission),
-    });
-  } catch (error) {
-    console.error("Sheets read error:", error.message);
-
-    res.status(500).json({
-      success: false,
-      message: "Could not retrieve enquiries from Google Sheets.",
-    });
-  }
-});
-
-// Staff: update an enquiry.
-app.put("/api/admin/submissions/:id", verifyAdmin, async (req, res) => {
-  try {
-    const id = req.params.id;
-    const rowNumber = await findSubmissionRow(id);
-
-    if (!rowNumber) {
-      return res.status(404).json({
-        success: false,
-        message: "Enquiry not found.",
-      });
-    }
-
-    const currentRows = await sheets.spreadsheets.values.get({
-      spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A${rowNumber}:J${rowNumber}`,
-    });
-
-    const current = rowToSubmission(currentRows.data.values?.[0] || []);
-    const body = req.body || {};
-
-    const updated = {
-      ...current,
-      fullName: typeof body.fullName === "string" ? body.fullName.trim() : current.fullName,
-      email: typeof body.email === "string" ? body.email.trim() : current.email,
-      phone: typeof body.phone === "string" ? body.phone.trim() : current.phone,
-      interest: typeof body.interest === "string" ? body.interest : current.interest,
-      method: typeof body.method === "string" ? body.method : current.method,
-      source: typeof body.source === "string" ? body.source : current.source,
-      status: STATUSES.includes(body.status) ? body.status : current.status,
-      notes: typeof body.notes === "string" ? body.notes : current.notes,
-      createdAt: current.createdAt,
-    };
-
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A${rowNumber}:J${rowNumber}`,
-      valueInputOption: "RAW",
-      requestBody: {
-        values: [submissionToRow(updated)],
-      },
-    });
-
-    res.json({
-      success: true,
-      submission: {
-        ...updated,
-        syncedToSheet: true,
-        isSample: false,
-      },
-    });
-  } catch (error) {
-    console.error("Sheets update error:", error.message);
-
-    res.status(500).json({
-      success: false,
-      message: "Could not update the enquiry.",
-    });
-  }
-});
-
-// Staff: delete an enquiry.
-app.delete("/api/admin/submissions/:id", verifyAdmin, async (req, res) => {
-  try {
-    const rowNumber = await findSubmissionRow(req.params.id);
-
-    if (!rowNumber) {
-      return res.status(404).json({
-        success: false,
-        message: "Enquiry not found.",
-      });
-    }
-
-    const sheetId = await ensureSheetReady();
-
+async function ensureSheet() {
+  const meta = await sheets.spreadsheets.get({ spreadsheetId: sheetId })
+  const exists = (meta.data.sheets || []).some((item) => item.properties?.title === sheetTab)
+  if (!exists) {
     await sheets.spreadsheets.batchUpdate({
-      spreadsheetId: SHEET_ID,
-      requestBody: {
-        requests: [
-          {
-            deleteDimension: {
-              range: {
-                sheetId,
-                dimension: "ROWS",
-                startIndex: rowNumber - 1,
-                endIndex: rowNumber,
-              },
-            },
-          },
-        ],
-      },
-    });
-
-    res.json({
-      success: true,
-      message: "Enquiry deleted successfully.",
-    });
-  } catch (error) {
-    console.error("Sheets delete error:", error.message);
-
-    res.status(500).json({
-      success: false,
-      message: "Could not delete the enquiry.",
-    });
+      spreadsheetId: sheetId,
+      requestBody: { requests: [{ addSheet: { properties: { title: sheetTab } } }] },
+    })
   }
-});
+  const header = await sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range: `${sheetTab}!A1:K1` })
+  if (!header.data.values?.length) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: sheetId,
+      range: `${sheetTab}!A1:K1`,
+      valueInputOption: 'RAW',
+      requestBody: { values: [headers] },
+    })
+  }
+}
 
-app.listen(PORT, () => {
-  console.log(`Her Space API running on port ${PORT}`);
-});
+async function readRows() {
+  await ensureSheet()
+  const result = await sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range: `${sheetTab}!A2:K` })
+  return result.data.values || []
+}
+
+async function upsertSubmission(submission) {
+  const rows = await readRows()
+  const index = rows.findIndex((row) => clean(row[0], 120) === submission.id)
+  const values = [[
+    submission.id, submission.createdAt, submission.fullName, submission.email,
+    submission.phone, submission.interest, submission.method, submission.source,
+    submission.status, submission.notes, 'Yes',
+  ]]
+  if (index >= 0) {
+    const rowNumber = index + 2
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: sheetId, range: `${sheetTab}!A${rowNumber}:K${rowNumber}`,
+      valueInputOption: 'RAW', requestBody: { values },
+    })
+  } else {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: sheetId, range: `${sheetTab}!A:K`, valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS', requestBody: { values },
+    })
+  }
+}
+
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'Her Space submissions API' }))
+
+app.post('/api/staff/login', (req, res) => {
+  const key = req.ip || 'unknown'
+  const attempts = loginAttempts.get(key) || { count: 0, started: Date.now() }
+  if (Date.now() - attempts.started > 15 * 60 * 1000) {
+    attempts.count = 0
+    attempts.started = Date.now()
+  }
+  if (attempts.count >= 10) return res.status(429).json({ error: 'Too many attempts. Try again in 15 minutes.' })
+  if (!safeEqual(clean(req.body?.username, 120).toLowerCase(), adminUsername.toLowerCase()) || !safeEqual(req.body?.password || '', adminPassword)) {
+    attempts.count += 1
+    loginAttempts.set(key, attempts)
+    return res.status(401).json({ error: 'Incorrect username or password.' })
+  }
+  loginAttempts.delete(key)
+  res.json({ ...issueToken(adminUsername), username: adminUsername, name: 'Studio Staff', role: 'Front desk' })
+})
+
+// Public contact-form endpoint. It accepts only contact details and always sets a new enquiry status.
+app.post('/api/enquiries', async (req, res) => {
+  const clientKey = req.ip || 'unknown'
+  const windowStart = Date.now() - 60 * 60 * 1000
+  const recentAttempts = (enquiryAttempts.get(clientKey) || []).filter((time) => time > windowStart)
+  if (recentAttempts.length >= 20) return res.status(429).json({ error: 'Too many enquiries. Please try again later.' })
+  recentAttempts.push(Date.now())
+  enquiryAttempts.set(clientKey, recentAttempts)
+
+  const fullName = clean(req.body?.fullName, 120)
+  const email = clean(req.body?.email, 254)
+  const phone = clean(req.body?.phone, 40)
+  if (!fullName || (!email && !phone)) return res.status(400).json({ error: 'Name and a phone number or email are required.' })
+  const submission = {
+    id: clean(req.body?.id, 120) || randomUUID(), createdAt: new Date().toISOString(),
+    fullName, email, phone, interest: clean(req.body?.interest, 160) || 'General enquiry',
+    method: clean(req.body?.method, 40) || 'Email', source: 'Website contact form',
+    status: 'new', notes: '', syncedToSheet: true,
+  }
+  try {
+    await upsertSubmission(submission)
+    return res.status(201).json({ ok: true, submission })
+  } catch (error) {
+    console.error('Unable to save enquiry to Google Sheets:', error.message)
+    return res.status(503).json({ error: 'We could not save your enquiry right now. Please try again shortly.' })
+  }
+})
+
+app.get('/api/staff/submissions', requireStaff, async (_req, res) => {
+  try {
+    const rows = await readRows()
+    res.json({ ok: true, submissions: rows.filter((row) => row[0]).map(rowToSubmission) })
+  } catch (error) {
+    console.error('Unable to read Google Sheets:', error.message)
+    res.status(503).json({ error: 'Could not load enquiries from Google Sheets.' })
+  }
+})
+
+app.put('/api/staff/submissions/:id', requireStaff, async (req, res) => {
+  const id = clean(req.params.id, 120)
+  const updated = {
+    id,
+    createdAt: clean(req.body?.createdAt, 60) || new Date().toISOString(),
+    fullName: clean(req.body?.fullName, 120), email: clean(req.body?.email, 254),
+    phone: clean(req.body?.phone, 40), interest: clean(req.body?.interest, 160),
+    method: clean(req.body?.method, 40), source: clean(req.body?.source, 160) || 'Website contact form',
+    status: normalizeStatus(req.body?.status),
+    notes: clean(req.body?.notes, 4000),
+    syncedToSheet: true,
+  }
+  if (!updated.fullName) return res.status(400).json({ error: 'Name is required.' })
+  try {
+    await upsertSubmission(updated)
+    return res.json({ ok: true, submission: updated })
+  } catch (error) {
+    console.error('Unable to update Google Sheets:', error.message)
+    return res.status(503).json({ error: 'Could not update this enquiry in Google Sheets.' })
+  }
+})
+
+app.delete('/api/staff/submissions/:id', requireStaff, async (req, res) => {
+  try {
+    const rows = await readRows()
+    const index = rows.findIndex((row) => clean(row[0], 120) === clean(req.params.id, 120))
+    if (index >= 0) {
+      const rowNumber = index + 2
+      const meta = await sheets.spreadsheets.get({ spreadsheetId: sheetId })
+      const tab = (meta.data.sheets || []).find((item) => item.properties?.title === sheetTab)
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId: sheetId,
+        requestBody: { requests: [{ deleteDimension: { range: { sheetId: tab.properties.sheetId, dimension: 'ROWS', startIndex: rowNumber - 1, endIndex: rowNumber } } }] },
+      })
+    }
+    res.json({ ok: true })
+  } catch (error) {
+    console.error('Unable to delete from Google Sheets:', error.message)
+    res.status(503).json({ error: 'Could not delete this enquiry from Google Sheets.' })
+  }
+})
+
+app.listen(port, () => console.log(`Her Space submissions API listening on ${port}`))

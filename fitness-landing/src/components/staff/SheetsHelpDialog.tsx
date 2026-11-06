@@ -11,26 +11,25 @@ import { copyToClipboard } from '@/lib/export'
 import { isSheetsConfigured, sheetsSpreadsheetUrl } from '@/lib/sheets'
 import { cn } from '@/lib/utils'
 
-const ENV_TEMPLATE = `VITE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
-VITE_SHEETS_SHARED_SECRET=herspace-sheet-secret
-VITE_SHEETS_SPREADSHEET_URL=https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit`
+const ENV_TEMPLATE = `VITE_API_BASE_URL=https://your-render-backend.onrender.com
+VITE_SHEETS_SPREADSHEET_ID=YOUR_GOOGLE_SHEET_ID`
 
 const STEPS = [
   {
-    title: 'Create the spreadsheet',
-    body: 'Make a new Google Sheet named Her Space Submissions. The Apps Script creates the Submissions tab and header row automatically.',
+    title: 'Deploy the submissions backend',
+    body: 'Deploy the backend/ folder as a Node service on Render. Add the Google service-account and staff environment variables from backend/.env.example.',
   },
   {
-    title: 'Add the Apps Script',
-    body: 'In the sheet, open Extensions → Apps Script. Replace Code.gs with the file from this project at google-apps-script/Code.gs, then save.',
+    title: 'Share the sheet with the service account',
+    body: 'Share the spreadsheet with GOOGLE_SERVICE_ACCOUNT_EMAIL and give it Editor access. Keep GOOGLE_PRIVATE_KEY in Render only.',
   },
   {
-    title: 'Deploy as a web app',
-    body: 'Click Deploy → New deployment → Web app. Execute as Me, set access to Anyone, then deploy and copy the web app URL. Redeploy a new version whenever you change Code.gs.',
+    title: 'Configure the frontend',
+    body: 'Set VITE_API_BASE_URL in Vercel to the Render service URL and redeploy the website.',
   },
   {
-    title: 'Connect the portal',
-    body: 'Add the web app URL, shared secret and spreadsheet URL to your .env file, then restart the dev server or redeploy the site.',
+    title: 'Sync existing enquiries',
+    body: 'Open the staff portal and choose Sync now to send enquiries already saved in this browser to the spreadsheet.',
   },
 ]
 

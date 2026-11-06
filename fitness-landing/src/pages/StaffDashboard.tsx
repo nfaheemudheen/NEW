@@ -303,7 +303,7 @@ function StaffDashboardContent({ session }: { session: StaffSession }) {
 
       if (failed > 0) {
         showToast(
-          `${synced} synced, ${failed} could not reach Google Sheets. Check the webhook setup.`,
+          `${synced} synced, ${failed} could not reach the submissions service. Check the backend setup.`,
           'error',
         )
         return

@@ -8,7 +8,6 @@ import {
   Eye,
   EyeOff,
   Flower2,
-  KeyRound,
   Loader2,
   LockKeyhole,
   ShieldCheck,
@@ -16,11 +15,7 @@ import {
   UserRound,
 } from 'lucide-react'
 import studioImage from '@/assets/studio.jpg'
-import {
-  DEFAULT_STAFF_CREDENTIALS,
-  getStaffSession,
-  loginStaff,
-} from '@/lib/auth'
+import { getStaffSession, loginStaff } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 
 const PORTAL_FEATURES = [
@@ -56,13 +51,7 @@ export default function StaffLogin() {
     return <Navigate to="/staff" replace />
   }
 
-  function fillDemoCredentials() {
-    setUsername(DEFAULT_STAFF_CREDENTIALS.username)
-    setPassword(DEFAULT_STAFF_CREDENTIALS.password)
-    setError('')
-  }
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (submitting) return
 
@@ -75,19 +64,17 @@ export default function StaffLogin() {
 
     setSubmitting(true)
 
-    window.setTimeout(() => {
-      const result = loginStaff(username, password, remember)
-      setSubmitting(false)
+    const result = await loginStaff(username, password, remember)
+    setSubmitting(false)
 
-      if (!result.ok) {
-        setError(result.error)
-        setPassword('')
-        passwordRef.current?.focus()
-        return
-      }
+    if (!result.ok) {
+      setError(result.error)
+      setPassword('')
+      passwordRef.current?.focus()
+      return
+    }
 
-      navigate('/staff', { replace: true })
-    }, 500)
+    navigate('/staff', { replace: true })
   }
 
   return (
@@ -332,51 +319,6 @@ export default function StaffLogin() {
                   )}
                 </button>
               </form>
-
-              <div className="mt-6 rounded-2xl border border-dashed border-brand-200 bg-white/80 p-4 shadow-sm backdrop-blur">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-2.5">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
-                      <KeyRound size={16} />
-                    </span>
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-700">
-                        Demo access
-                      </p>
-                      <p className="text-[11px] text-slate-400">Use these default credentials</p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={fillDemoCredentials}
-                    className="rounded-full border border-brand-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-brand-700 transition-colors hover:bg-brand-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20"
-                  >
-                    Fill in
-                  </button>
-                </div>
-                <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                  <div className="rounded-xl bg-slate-50 px-3 py-2">
-                    <dt className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
-                      Username
-                    </dt>
-                    <dd className="mt-0.5 font-mono font-semibold text-slate-800">
-                      {DEFAULT_STAFF_CREDENTIALS.username}
-                    </dd>
-                  </div>
-                  <div className="rounded-xl bg-slate-50 px-3 py-2">
-                    <dt className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
-                      Password
-                    </dt>
-                    <dd className="mt-0.5 font-mono font-semibold text-slate-800">
-                      {DEFAULT_STAFF_CREDENTIALS.password}
-                    </dd>
-                  </div>
-                </dl>
-                <p className="mt-3 text-[10px] leading-relaxed text-slate-400">
-                  Demo login only. Set secure staff credentials and server-side auth before
-                  launching publicly.
-                </p>
-              </div>
 
               <p className="mt-6 flex items-start justify-center gap-2 text-center text-[11px] leading-relaxed text-slate-400">
                 <ShieldCheck size={14} className="mt-0.5 shrink-0 text-brand-500" />
