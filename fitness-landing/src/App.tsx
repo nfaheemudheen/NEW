@@ -48,6 +48,7 @@ function App() {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/services/offline" element={<ServicesClassPage mode="offline" />} />
           <Route path="/services/online" element={<ServicesClassPage mode="online" />} />
+          <Route path="/login" element={<StaffLogin />} />
           <Route path="/staff/login" element={<StaffLogin />} />
           <Route path="/staff" element={<StaffDashboard />} />
           <Route path="*" element={<NotFound />} />
