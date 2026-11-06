@@ -144,7 +144,28 @@ async function upsertSubmission(submission) {
   }
 }
 
-app.get('/health', (_req, res) => res.json({ ok: true, service: 'Her Space submissions API' }))
+app.get('/health', async (_req, res) => {
+  try {
+    const spreadsheet = await sheets.spreadsheets.get({
+      spreadsheetId: sheetId,
+      fields: 'spreadsheetId,properties.title',
+    })
+    return res.json({
+      ok: true,
+      service: 'Her Space submissions API',
+      googleSheets: 'connected',
+      spreadsheet: spreadsheet.data.properties?.title || 'Google Sheet',
+    })
+  } catch (error) {
+    console.error('Health check could not access Google Sheets:', error.message)
+    return res.status(503).json({
+      ok: false,
+      service: 'Her Space submissions API',
+      googleSheets: 'unavailable',
+      error: 'The backend cannot access the configured spreadsheet. Check the sheet ID, service-account key, and Editor sharing access.',
+    })
+  }
+})
 
 app.post('/api/staff/login', (req, res) => {
   const key = req.ip || 'unknown'
@@ -184,6 +205,7 @@ app.post('/api/enquiries', async (req, res) => {
   }
   try {
     await upsertSubmission(submission)
+    console.info('Saved website enquiry to Google Sheets.')
     return res.status(201).json({ ok: true, submission })
   } catch (error) {
     console.error('Unable to save enquiry to Google Sheets:', error.message)
