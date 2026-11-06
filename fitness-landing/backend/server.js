@@ -144,7 +144,11 @@ async function upsertSubmission(submission) {
   }
 }
 
-app.get('/health', async (_req, res) => {
+app.get('/health', (_req, res) => {
+  res.status(200).json({ ok: true, status: 'running' })
+})
+
+app.get('/ready', async (_req, res) => {
   try {
     const spreadsheet = await sheets.spreadsheets.get({
       spreadsheetId: sheetId,
