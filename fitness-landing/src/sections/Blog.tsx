@@ -51,7 +51,7 @@ export default function Blog() {
             src={groupYogaImage}
             alt="Women practicing yoga together in a bright studio"
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+            className="absolute inset-0 h-full w-full object-cover object-[center_18%] transition-transform duration-700 ease-out group-hover:scale-[1.035]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/20 to-brand-950/10 transition-colors duration-500 group-hover:from-brand-950/95" />
           <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4 sm:inset-x-8 sm:bottom-8 lg:inset-x-10 lg:bottom-10">

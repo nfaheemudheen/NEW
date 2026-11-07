@@ -5,6 +5,7 @@ import WhatsAppButton from '@/components/WhatsAppButton'
 import Hero from '@/sections/Hero'
 import About from '@/sections/About'
 import Programs from '@/sections/Programs'
+import StudioReels from '@/sections/StudioReels'
 import WhyChooseUs from '@/sections/WhyChooseUs'
 import Statistics from '@/sections/Statistics'
 import Membership from '@/sections/Membership'
@@ -35,6 +36,7 @@ export default function Home() {
         <Hero onStart={() => handleEnquire('Membership enquiry')} />
         <About />
         <Programs />
+        <StudioReels />
         <WhyChooseUs />
         <Statistics />
         <Membership onEnquire={handleEnquire} />
