@@ -698,16 +698,16 @@ export default function Contact({ prefill }: ContactProps) {
               className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-brand-950 via-brand-900 to-brand-700 p-5 text-white shadow-premium transition-all duration-300 hover:-translate-y-1 hover:shadow-glow focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 sm:min-h-[240px] sm:p-7"
             >
               <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-aqua-400/20 blur-3xl transition-transform duration-700 group-hover:scale-125" />
-              <div className="relative flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-aqua-300">
+              <div className="relative flex min-w-0 items-start justify-between gap-2 sm:gap-4">
+                <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-aqua-300 sm:h-12 sm:w-12">
                     <MapPin size={21} />
                   </span>
-                  <span>
+                  <span className="min-w-0">
                     <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-aqua-200">
                       {mainBranch.name}
                     </span>
-                    <span className="mt-0.5 block font-display text-xl sm:text-2xl">
+                    <span className="mt-0.5 block break-words font-display text-lg leading-tight sm:text-2xl">
                       {mainBranch.location}
                     </span>
                   </span>
@@ -718,29 +718,29 @@ export default function Contact({ prefill }: ContactProps) {
                 <p className="max-w-xl text-sm leading-relaxed text-white/75">
                   {mainBranch.address}
                 </p>
-                <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-aqua-400 px-4 py-2.5 text-sm font-bold text-brand-950 shadow-lg shadow-brand-950/20 transition-colors group-hover:bg-aqua-300">
-                  Main branch directions <ArrowRight size={16} />
+                <span className="mt-5 inline-flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-full bg-aqua-400 px-3 py-2.5 text-center text-xs font-bold leading-tight text-brand-950 shadow-lg shadow-brand-950/20 transition-colors group-hover:bg-aqua-300 sm:gap-2 sm:px-4 sm:text-sm">
+                  Main branch directions <ArrowRight size={15} className="shrink-0" />
                 </span>
               </div>
             </a>
 
             <article className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white bg-white/90 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-[0_22px_50px_-30px_rgba(0,91,173,0.3)] sm:min-h-[240px] sm:p-7">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
+              <div className="flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 sm:h-12 sm:w-12">
                     <MapPin size={21} />
                   </span>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
                       Next branch
                     </p>
-                    <h3 className="mt-0.5 font-display text-xl text-slate-900 sm:text-2xl">
+                    <h3 className="mt-0.5 break-words font-display text-xl leading-tight text-slate-900 sm:text-2xl">
                       {nextBranch.location}
                     </h3>
                   </div>
                 </div>
                 {nextBranch.status && (
-                  <span className="shrink-0 rounded-full bg-aqua-50 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.1em] text-aqua-800">
+                  <span className="max-w-full rounded-full bg-aqua-50 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.1em] text-aqua-800 sm:shrink-0">
                     {nextBranch.status}
                   </span>
                 )}
