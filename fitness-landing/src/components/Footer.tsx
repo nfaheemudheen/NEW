@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ArrowUpRight,
-  LockKeyhole,
   Mail,
   MapPin,
   Phone,
@@ -9,7 +8,7 @@ import {
 } from 'lucide-react'
 import { FacebookIcon, InstagramIcon, YouTubeIcon } from '@/components/SocialIcons'
 import { NAV_LINKS, STUDIO } from '@/data/site'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 type LegalDocument = 'privacy' | 'terms' | null
 
@@ -185,10 +184,14 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-brand-200/60 lg:flex-row">
-            <p>© 2026 {STUDIO.name}. All rights reserved.</p>
-            <p className="order-3 lg:order-2">Made for women</p>
-            <div className="order-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:order-3">
+          <div className="grid gap-4 border-t border-white/10 pt-6 text-center text-xs text-brand-200/65 sm:grid-cols-[1fr_auto] sm:items-center sm:text-left lg:grid-cols-[1fr_auto_1fr]">
+            <div>
+              <p>© 2026 {STUDIO.name}. All rights reserved.</p>
+              <p className="mt-1 font-display text-[11px] italic text-brand-200/45">
+                Website designed &amp; developed by Digitalix.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:col-start-2 sm:row-start-1 lg:col-start-2">
               <button
                 type="button"
                 onClick={() => setLegal('privacy')}
@@ -203,13 +206,10 @@ export default function Footer() {
               >
                 Terms &amp; Conditions
               </button>
-              <Link
-                to="/staff"
-                className="inline-flex items-center gap-1 font-semibold text-brand-200/80 transition-colors hover:text-white focus:outline-none focus-visible:text-white"
-              >
-                <LockKeyhole size={12} /> Staff login
-              </Link>
             </div>
+            <p className="inline-flex items-center justify-center font-display text-sm italic text-aqua-200 sm:col-span-2 lg:col-span-1 lg:justify-self-end">
+              Move stronger, together.
+            </p>
           </div>
         </div>
       </footer>
