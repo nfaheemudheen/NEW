@@ -41,6 +41,7 @@ import {
   type SubmissionStatus,
 } from '@/lib/submissions'
 import {
+  canPullFromSheet,
   deleteSubmissionFromSheet,
   fetchSubmissionsFromSheet,
   isSheetsConfigured,
@@ -206,7 +207,7 @@ function StaffDashboardContent({ session }: { session: StaffSession }) {
   }
 
   async function pullFromSheet(quiet = true) {
-    if (!isSheetsConfigured) return { added: 0, updated: 0 }
+    if (!canPullFromSheet) return { added: 0, updated: 0 }
 
     const result = await fetchSubmissionsFromSheet()
 
@@ -225,7 +226,7 @@ function StaffDashboardContent({ session }: { session: StaffSession }) {
   }
 
   useEffect(() => {
-    if (!isSheetsConfigured || autoPullRef.current) return
+    if (!canPullFromSheet || autoPullRef.current) return
     autoPullRef.current = true
 
     void pullFromSheet(true).then((merged) => {

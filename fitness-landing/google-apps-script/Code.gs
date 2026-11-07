@@ -5,13 +5,16 @@
  * fields listed in HEADERS. The response always includes `ok`; the frontend
  * considers the write successful only when it receives `{ ok: true }`.
  *
- * Before deploying, replace SHARED_SECRET with a long random value and use
- * the same value for VITE_SHEETS_SHARED_SECRET in the frontend deployment.
+ * Deploy as a web app with "Execute as: Me" and "Who has access: Anyone",
+ * then copy the /exec URL into VITE_SHEETS_WEBHOOK_URL for the website.
+ * The shared secret below already matches the website default.
  */
 
 const SPREADSHEET_ID = '15rz8F3nbGLdp4Hkesgfu4RtYJkPtqUyEVLsFbur2gek'
 const SHEET_NAME = 'Her Space'
-const SHARED_SECRET = 'REPLACE_WITH_A_LONG_RANDOM_SECRET'
+// Light spam check shared with the website. It is embedded in the public
+// bundle, so treat it as a filter rather than a true secret.
+const SHARED_SECRET = 'hs_sync_2f8c1d6a4b9e7f3c5a0d8e6b2c4f7a9d'
 
 const HEADERS = [
   'Submission ID',
@@ -33,10 +36,6 @@ const VALID_STATUSES = ['new', 'contacted', 'booked', 'archived']
 function doPost(e) {
   try {
     const payload = parsePayload_(e)
-
-    if (!SHARED_SECRET || SHARED_SECRET === 'REPLACE_WITH_A_LONG_RANDOM_SECRET') {
-      throw new Error('Webhook setup is incomplete: replace the SHARED_SECRET placeholder.')
-    }
 
     if (String(payload.secret || '') !== SHARED_SECRET) {
       throw new Error('Invalid shared secret.')
