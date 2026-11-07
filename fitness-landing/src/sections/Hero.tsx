@@ -8,6 +8,12 @@ type HeroProps = {
 
 export default function Hero({ onStart }: HeroProps) {
   const reduceMotion = useReducedMotion()
+  const renderTitle = (text: string) =>
+    Array.from(text).map((character, index) => (
+      <span className="hero-title-char" key={`${character}-${index}`} style={{ animationDelay: `${index * 22}ms` }}>
+        {character === ' ' ? '\u00a0' : character}
+      </span>
+    ))
 
   return (
     <section id="home" className="relative isolate min-h-[600px] overflow-hidden bg-brand-950 text-white sm:min-h-[680px] lg:min-h-[740px]">
@@ -27,13 +33,9 @@ export default function Hero({ onStart }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className="hero-title group font-display text-[clamp(2.25rem,9vw,3rem)] font-semibold leading-[1.14] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem]">
-            <span className="hero-title-line inline-block">
-              Move with purpose.
-            </span>
-            <span className="hero-title-line mt-2 block italic text-[#6fd22e]">
-              Feel more like you.
-            </span>
+          <h1 tabIndex={0} className="hero-title font-display text-[clamp(2.25rem,9vw,3rem)] font-semibold leading-[1.14] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem]">
+            <span className="hero-title-line inline-block">{renderTitle('Move with purpose.')}</span>
+            <span className="hero-title-line mt-2 block italic text-[#6fd22e]">{renderTitle('Feel more like you.')}</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg sm:leading-8">
             Find strength training, yoga and energising group classes in a studio where good
