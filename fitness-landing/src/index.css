@@ -300,6 +300,43 @@ section.bg-brand-50 {
   background-color: rgb(239 247 255 / 0.74);
 }
 
+/* Small-screen defaults shared by every route, including the staff portal. */
+@media (max-width: 639px) {
+  html {
+    scroll-padding-top: 84px;
+  }
+
+  .section {
+    padding: 3.5rem 1rem;
+  }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
+    line-height: 1.15;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+
+  /* Prevent iOS Safari from zooming the page when a form field is focused. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .section {
+    padding-inline: 0.875rem;
+  }
+}
+
 @media (max-width: 640px) {
   .ambient-orb-blue {
     top: -7rem;
