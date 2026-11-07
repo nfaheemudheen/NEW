@@ -6,11 +6,7 @@ import type { Submission } from '@/lib/submissions'
  * Keep this in sync with SHARED_SECRET in google-apps-script/Code.gs.
  * It is a light spam check, not a real secret: Vite embeds it in the public bundle.
  */
-const DEFAULT_SHEETS_SECRET = 'hs_sync_2f8c1d6a4b9e7f3c5a0d8e6b2c4f7a9d'
-const SHEETS_WEBHOOK_URL = (import.meta.env.VITE_SHEETS_WEBHOOK_URL ?? '').trim()
-const SHEETS_SHARED_SECRET = (
-  import.meta.env.VITE_SHEETS_SHARED_SECRET ?? DEFAULT_SHEETS_SECRET
-).trim()
+const SHEETS_WEBHOOK_URL = '/api/enquiries'
 const SPREADSHEET_ID = (import.meta.env.VITE_SHEETS_SPREADSHEET_ID ?? '').trim()
 export const sheetsSpreadsheetUrl = (
   import.meta.env.VITE_SHEETS_SPREADSHEET_URL ||
@@ -53,43 +49,38 @@ function submissionPayload(submission: Submission) {
   }
 }
 
+
 async function postToSheetsWebhook(
   body: Record<string, unknown>,
 ): Promise<SheetSyncResult> {
   try {
     const response = await fetch(SHEETS_WEBHOOK_URL, {
       method: 'POST',
-      // text/plain avoids a browser CORS preflight for the Apps Script web app.
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ secret: SHEETS_SHARED_SECRET, ...body }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
     })
-    const text = await response.text()
-    let payload: { ok?: boolean; error?: string } | null = null
-    try {
-      payload = text ? (JSON.parse(text) as { ok?: boolean; error?: string }) : null
-    } catch {
-      // Apps Script returns an HTML login page when the web app is not public.
-      payload = null
-    }
 
-    if (!response.ok) {
-      throw new Error(payload?.error || `Google Sheets returned ${response.status}.`)
-    }
-    if (!payload || payload.ok !== true) {
+    const payload = await response.json()
+
+    if (!response.ok || payload.ok !== true) {
       throw new Error(
-        payload?.error ||
-          'The Google Sheets webhook did not confirm the write. Check that the Apps Script web app is deployed with access set to "Anyone".',
+        payload.error || `Submission failed: ${response.status}`
       )
     }
+
     return { ok: true }
   } catch (error) {
     return {
       ok: false,
-      error:
-        error instanceof Error ? error.message : 'Could not save the enquiry to Google Sheets.',
+      error: error instanceof Error
+        ? error.message
+        : 'Could not save the enquiry to Google Sheets.',
     }
   }
 }
+
 
 /**
  * Writes an enquiry to Apps Script when configured, then falls back to the
