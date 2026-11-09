@@ -719,20 +719,6 @@ export default function Contact({ prefill }: ContactProps) {
                 <p className="max-w-xl text-sm leading-relaxed text-white/75">
                   {branchOne.address}
                 </p>
-                <div className="mt-3 flex items-center gap-2.5">
-                  <img
-                    src={branchOne.headImage}
-                    alt={branchOne.headName}
-                    loading="lazy"
-                    className="h-9 w-9 shrink-0 rounded-full border border-white/40 object-cover object-top sm:h-10 sm:w-10"
-                  />
-                  <p className="min-w-0 text-xs font-semibold text-white/85">
-                    <span className="block text-[9px] font-bold uppercase tracking-[0.14em] text-aqua-200">
-                      {branchOne.headRole}
-                    </span>
-                    {branchOne.headName}
-                  </p>
-                </div>
                 <span className="mt-5 inline-flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-full bg-aqua-400 px-3 py-2.5 text-center text-xs font-bold leading-tight text-brand-950 shadow-lg shadow-brand-950/20 transition-colors group-hover:bg-aqua-300 sm:gap-2 sm:px-4 sm:text-sm">
                   Branch One directions <ArrowRight size={15} className="shrink-0" />
                 </span>
@@ -763,20 +749,6 @@ export default function Contact({ prefill }: ContactProps) {
                   <MapPin size={16} className="mt-0.5 shrink-0 text-brand-600" />
                   <span>{branchTwo.address}</span>
                 </p>
-                <div className="mt-3 flex items-center gap-2.5">
-                  <img
-                    src={branchTwo.headImage}
-                    alt={branchTwo.headName}
-                    loading="lazy"
-                    className="h-9 w-9 shrink-0 rounded-full border border-brand-100 object-cover object-top sm:h-10 sm:w-10"
-                  />
-                  <p className="min-w-0 text-xs font-semibold text-slate-700">
-                    <span className="block text-[9px] font-bold uppercase tracking-[0.14em] text-brand-700">
-                      {branchTwo.headRole}
-                    </span>
-                    {branchTwo.headName}
-                  </p>
-                </div>
                 <a
                   href={branchTwoMapUrl}
                   target="_blank"

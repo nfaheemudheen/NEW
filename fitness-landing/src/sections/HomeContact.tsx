@@ -112,21 +112,6 @@ export default function HomeContact() {
                       <MapPin size={16} className="mt-1 shrink-0 text-brand-600" />
                       {branch.address}
                     </p>
-                    <div className="mt-3 flex items-center gap-2.5">
-                      <img
-                        src={branch.headImage}
-                        alt={branch.headName}
-                        loading="lazy"
-                        className="h-9 w-9 shrink-0 rounded-full border border-brand-100 object-cover object-top sm:h-10 sm:w-10"
-                      />
-                      <p className="min-w-0 text-xs font-semibold text-slate-600">
-                        <span className="block text-[9px] font-bold uppercase tracking-[0.12em] text-brand-700">
-                          {branch.headRole}
-                        </span>
-                        {branch.headName}
-                      </p>
-                    </div>
-
                     <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
                       <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
                         <Clock3 size={13} className="text-brand-500" />

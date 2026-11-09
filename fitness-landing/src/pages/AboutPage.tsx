@@ -1,4 +1,4 @@
-import { ArrowRight, Flower2, MapPin } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Flower2, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -95,10 +95,10 @@ export default function AboutPage() {
                   <MapPin size={13} /> Branches
                 </span>
                 <h3 className="mt-3 font-display text-2xl text-slate-900 sm:text-3xl">
-                  Branch leadership
+                  Studio locations
                 </h3>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600">
-                  A familiar face at every location, keeping the Her Space welcome personal.
+                  Find the Her Space studio that feels right for you. Both locations are ready to welcome you.
                 </p>
               </div>
 
@@ -106,9 +106,9 @@ export default function AboutPage() {
                 {BRANCHES.map((branch, index) => (
                   <article
                     key={branch.name}
-                    className="group relative isolate overflow-hidden rounded-[1.75rem] border border-brand-100 bg-white p-4 shadow-[0_18px_45px_-32px_rgba(9,39,71,0.35)] transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-premium sm:rounded-[2rem] sm:p-6"
+                    className="group relative isolate flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-brand-100 bg-gradient-to-br from-white via-white to-brand-50/70 p-4 shadow-[0_18px_45px_-32px_rgba(9,39,71,0.35)] transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-premium sm:rounded-[2rem] sm:p-6"
                   >
-                    <div className="pointer-events-none absolute -right-12 -top-16 -z-10 h-40 w-40 rounded-full bg-brand-50 transition-transform duration-500 group-hover:scale-125" />
+                    <div className="pointer-events-none absolute -right-12 -top-16 -z-10 h-40 w-40 rounded-full bg-aqua-100/70 transition-transform duration-500 group-hover:scale-125" />
                     <div className="mb-5 flex items-center justify-between">
                       <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-brand-700 sm:text-[10px]">
                         <span className="h-1.5 w-1.5 rounded-full bg-aqua-500" />
@@ -120,24 +120,14 @@ export default function AboutPage() {
                     </div>
 
                     <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-                      <div className="shrink-0 rounded-full bg-gradient-to-br from-brand-500 to-aqua-400 p-[3px] shadow-lg shadow-brand-900/10 transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105">
-                        <img
-                          src={branch.headImage}
-                          alt={branch.headName}
-                          loading="lazy"
-                          className="h-[4.25rem] w-[4.25rem] rounded-full border-2 border-white object-cover object-top sm:h-20 sm:w-20"
-                        />
-                      </div>
+                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-700 text-white shadow-md shadow-brand-900/15 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:rotate-3 sm:h-14 sm:w-14">
+                        <MapPin size={22} />
+                      </span>
                       <div className="min-w-0">
+                        <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-brand-700 sm:text-[10px]">Visit us</p>
                         <h4 className="break-words font-display text-xl leading-tight text-slate-900 sm:text-2xl">
                           {branch.location}
                         </h4>
-                        <p className="mt-1.5 text-[9px] font-bold uppercase tracking-[0.11em] text-brand-700 sm:text-[10px] sm:tracking-[0.14em]">
-                          {branch.headRole}
-                        </p>
-                        <p className="mt-1 text-sm font-semibold text-slate-700">
-                          {branch.headName}
-                        </p>
                       </div>
                     </div>
 
@@ -145,6 +135,14 @@ export default function AboutPage() {
                       <MapPin size={15} className="mt-0.5 shrink-0 text-brand-600" />
                       <span>{branch.address}</span>
                     </div>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-5 inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-2 text-xs font-bold text-brand-800 transition hover:border-brand-700 hover:bg-brand-700 hover:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25"
+                    >
+                      Get directions <ArrowUpRight size={15} />
+                    </a>
                   </article>
                 ))}
               </div>

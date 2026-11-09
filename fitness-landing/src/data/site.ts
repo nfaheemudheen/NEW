@@ -21,9 +21,6 @@ type Branch = {
   name: string
   location: string
   address: string
-  headName: string
-  headRole: string
-  headImage: string
 }
 
 export const BRANCHES: Branch[] = [
@@ -31,18 +28,12 @@ export const BRANCHES: Branch[] = [
     name: 'Branch One',
     location: 'Thiruporur',
     address: '2/252, Ayesha Complex, near Mohan Hospital, Thiruporur area.',
-    headName: 'Shanthi Kasiraj',
-    headRole: ' Founder & Thiruporur Branch Head',
-    headImage: '/iamge1.webp',
   },
   {
     name: 'Branch Two',
     location: 'OMR, Kelambakkam',
     address:
       'No. 3/72, 2nd Floor, TVM Towers, Old Mahabalipuram Road (OMR), Kelambakkam, Thiruporur Taluk, Tamil Nadu 603103.',
-    headName: 'Ranjitha Arunkumar',
-    headRole: 'Kelambakkam Branch Head',
-    headImage: '/image2.webp',
   },
 ]
 

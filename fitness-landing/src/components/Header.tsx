@@ -57,7 +57,23 @@ export default function Header({ onJoin }: HeaderProps) {
   useEffect(() => {
     if (!open) return
 
-    const previousOverflow = document.body.style.overflow
+    const scrollY = window.scrollY
+    const previousBodyStyles = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    }
+
+    // Lock the page at its current scroll position while the mobile drawer is open.
+    // Setting overflow alone can make mobile Safari jump to the top of the page.
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.width = '100%'
     document.body.style.overflow = 'hidden'
 
     const firstNavLink = menuRef.current?.querySelector<HTMLElement>('nav a[href]')
@@ -95,7 +111,13 @@ export default function Header({ onJoin }: HeaderProps) {
 
     window.addEventListener('keydown', onKeyDown)
     return () => {
-      document.body.style.overflow = previousOverflow
+      document.body.style.position = previousBodyStyles.position
+      document.body.style.top = previousBodyStyles.top
+      document.body.style.left = previousBodyStyles.left
+      document.body.style.right = previousBodyStyles.right
+      document.body.style.width = previousBodyStyles.width
+      document.body.style.overflow = previousBodyStyles.overflow
+      window.scrollTo(0, scrollY)
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [open])
