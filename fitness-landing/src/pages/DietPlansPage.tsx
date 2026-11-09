@@ -49,8 +49,8 @@ const DIET_PLAN_OPTIONS = [
 export default function DietPlansPage() {
   useScrollReveal()
   const navigate = useNavigate()
-  const [selectedPlan, setSelectedPlan] = useState(0)
-  const selected = DIET_PLAN_OPTIONS[selectedPlan]
+  const [selectedPlan, setSelectedPlan] = useState<number | null>(null)
+  const selected = selectedPlan === null ? null : DIET_PLAN_OPTIONS[selectedPlan]
   const goToNutritionEnquiry = () =>
     navigate('/contact?interest=Nutrition%20%26%20wellness')
 
@@ -128,7 +128,7 @@ export default function DietPlansPage() {
               })}
             </div>
 
-            <div
+            {selected && <div
               key={selected.title}
               className="mt-5 flex flex-col items-center gap-4 overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800 p-6 text-center text-white shadow-[0_24px_60px_-35px_rgba(9,39,71,0.55)] sm:rounded-[2rem] sm:p-8"
               data-reveal
@@ -155,7 +155,7 @@ export default function DietPlansPage() {
                 Ask us about this plan
                 <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
               </button>
-            </div>
+            </div>}
 
             <p className="mx-auto mt-6 max-w-3xl text-center text-xs leading-relaxed text-slate-500">
               Nutrition guidance is educational and does not replace personalised medical advice.
