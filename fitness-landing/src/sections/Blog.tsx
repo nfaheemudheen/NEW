@@ -1,7 +1,6 @@
 import { ArrowUpRight, BookOpen, Heart, Leaf, Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import groupYogaImage from '@/assets/gallery-yoga-duo.jpg'
-
-const BLOG_URL = 'https://herspacefitness.com/blog/'
 
 const TOPICS = [
   {
@@ -40,10 +39,8 @@ export default function Blog() {
           </p>
         </header>
 
-        <a
-          href={BLOG_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/blog"
           aria-label="Read the Her Space Fitness blog"
           className="group relative block min-h-[280px] overflow-hidden rounded-[1.5rem] bg-brand-950 sm:min-h-[360px] sm:rounded-[2rem] lg:min-h-[420px]"
         >
@@ -70,7 +67,7 @@ export default function Blog() {
               <ArrowUpRight size={22} />
             </span>
           </div>
-        </a>
+        </Link>
 
         <div className="grid gap-3 px-1 pb-2 pt-4 sm:grid-cols-3 sm:gap-4 sm:px-2 sm:pt-5">
           {TOPICS.map(({ icon: Icon, label, description }) => (
@@ -93,15 +90,13 @@ export default function Blog() {
 
         <div className="flex flex-col items-center justify-center gap-3 px-3 pb-5 pt-4 text-center sm:flex-row sm:gap-5 sm:pb-7">
           <p className="text-sm text-slate-600">A little inspiration for your next strong day.</p>
-          <a
-            href={BLOG_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/blog"
             className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-700 px-5 py-3 text-sm font-bold text-white shadow-[0_12px_28px_-12px_rgba(0,91,173,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-800 hover:shadow-[0_18px_35px_-12px_rgba(0,91,173,0.5)] focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25"
           >
             Explore the blog
             <ArrowUpRight size={17} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

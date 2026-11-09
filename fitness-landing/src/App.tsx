@@ -1,16 +1,32 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Home from '@/pages/Home'
 import AboutPage from '@/pages/AboutPage'
 import ContactPage from '@/pages/ContactPage'
 import FaqPage from '@/pages/FaqPage'
+import BlogPage from '@/pages/BlogPage'
 import DietPlansPage from '@/pages/DietPlansPage'
 import ServicesPage, { ServicesClassPage } from '@/pages/ServicesPage'
 import StaffLogin from '@/pages/StaffLogin'
 import StaffDashboard from '@/pages/StaffDashboard'
 import NotFound from '@/pages/NotFound'
 import AmbientBackground from '@/components/AmbientBackground'
+import BranchLaunchPopup from '@/components/BranchLaunchPopup'
+
+const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'))
+
+function PageFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <span
+        className="h-10 w-10 animate-spin rounded-full border-[3px] border-brand-100 border-t-brand-600"
+        role="status"
+        aria-label="Loading story"
+      />
+    </div>
+  )
+}
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -100,6 +116,7 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <SiteIntro />
+      <BranchLaunchPopup />
       <AmbientBackground />
       <div className="app-content">
         <Routes>
@@ -107,6 +124,15 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/faqs" element={<FaqPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route
+            path="/blog/:slug"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <BlogPostPage />
+              </Suspense>
+            }
+          />
           <Route path="/diet-plans" element={<DietPlansPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/services/offline" element={<ServicesClassPage mode="offline" />} />

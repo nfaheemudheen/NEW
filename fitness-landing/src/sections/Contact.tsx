@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { FacebookIcon, InstagramIcon, YouTubeIcon } from '@/components/SocialIcons'
 import studioImage from '@/assets/studio.jpg'
+import FranchiseInfo from '@/sections/FranchiseInfo'
 import { BRANCHES, CONTACT_METHODS, ENQUIRY_INTERESTS, STUDIO } from '@/data/site'
 import { addSubmission, markSubmissionSynced } from '@/lib/submissions'
 import { createSubmissionOnBackend } from '@/lib/sheets'
@@ -226,10 +227,10 @@ export default function Contact({ prefill }: ContactProps) {
     window.setTimeout(() => nameRef.current?.focus(), 60)
   }
 
-  const mainBranch = BRANCHES[0]
-  const nextBranch = BRANCHES[1]
-  const mainBranchMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mainBranch.address)}`
-  const nextBranchMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nextBranch.address)}`
+  const branchOne = BRANCHES[0]
+  const branchTwo = BRANCHES[1]
+  const branchOneMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branchOne.address)}`
+  const branchTwoMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branchTwo.address)}`
 
   return (
     <section id="contact" className="section relative overflow-hidden bg-bloom">
@@ -291,7 +292,7 @@ export default function Contact({ prefill }: ContactProps) {
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/60">
-                    Bloom Studio · OMR
+                    Bloom Studio · {BRANCHES[0].location}
                   </p>
                   <p className="mt-1 font-display text-xl text-white">A calm space to begin.</p>
                 </div>
@@ -299,7 +300,7 @@ export default function Contact({ prefill }: ContactProps) {
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(BRANCHES[0].address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Open the main studio in Google Maps"
+                  aria-label={`Open Branch One in ${BRANCHES[0].location} in Google Maps`}
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/30"
                 >
                   <ArrowUpRight size={18} />
@@ -691,10 +692,10 @@ export default function Contact({ prefill }: ContactProps) {
 
           <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-5">
             <a
-              href={mainBranchMapUrl}
+              href={branchOneMapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Get directions to ${mainBranch.location}`}
+              aria-label={`Get directions to Branch One, ${branchOne.location}`}
               className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-brand-950 via-brand-900 to-brand-700 p-5 text-white shadow-premium transition-all duration-300 hover:-translate-y-1 hover:shadow-glow focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 sm:min-h-[240px] sm:p-7"
             >
               <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-aqua-400/20 blur-3xl transition-transform duration-700 group-hover:scale-125" />
@@ -705,10 +706,10 @@ export default function Contact({ prefill }: ContactProps) {
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-aqua-200">
-                      {mainBranch.name}
+                      {branchOne.name}
                     </span>
                     <span className="mt-0.5 block break-words font-display text-lg leading-tight sm:text-2xl">
-                      {mainBranch.location}
+                      {branchOne.location}
                     </span>
                   </span>
                 </div>
@@ -716,10 +717,24 @@ export default function Contact({ prefill }: ContactProps) {
               </div>
               <div className="relative mt-5">
                 <p className="max-w-xl text-sm leading-relaxed text-white/75">
-                  {mainBranch.address}
+                  {branchOne.address}
                 </p>
+                <div className="mt-3 flex items-center gap-2.5">
+                  <img
+                    src={branchOne.headImage}
+                    alt={branchOne.headName}
+                    loading="lazy"
+                    className="h-9 w-9 shrink-0 rounded-full border border-white/40 object-cover object-top sm:h-10 sm:w-10"
+                  />
+                  <p className="min-w-0 text-xs font-semibold text-white/85">
+                    <span className="block text-[9px] font-bold uppercase tracking-[0.14em] text-aqua-200">
+                      {branchOne.headRole}
+                    </span>
+                    {branchOne.headName}
+                  </p>
+                </div>
                 <span className="mt-5 inline-flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-full bg-aqua-400 px-3 py-2.5 text-center text-xs font-bold leading-tight text-brand-950 shadow-lg shadow-brand-950/20 transition-colors group-hover:bg-aqua-300 sm:gap-2 sm:px-4 sm:text-sm">
-                  Main branch directions <ArrowRight size={15} className="shrink-0" />
+                  Branch One directions <ArrowRight size={15} className="shrink-0" />
                 </span>
               </div>
             </a>
@@ -732,18 +747,13 @@ export default function Contact({ prefill }: ContactProps) {
                   </span>
                   <div className="min-w-0">
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
-                      Next branch
+                      {branchTwo.name}
                     </p>
                     <h3 className="mt-0.5 break-words font-display text-xl leading-tight text-slate-900 sm:text-2xl">
-                      {nextBranch.location}
+                      {branchTwo.location}
                     </h3>
                   </div>
                 </div>
-                {nextBranch.status && (
-                  <span className="max-w-full rounded-full bg-aqua-50 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.1em] text-aqua-800 sm:shrink-0">
-                    {nextBranch.status}
-                  </span>
-                )}
               </div>
               <div className="mt-5 border-t border-slate-100 pt-4">
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
@@ -751,13 +761,27 @@ export default function Contact({ prefill }: ContactProps) {
                 </p>
                 <p className="mt-1.5 flex items-start gap-2.5 text-sm leading-relaxed text-slate-600">
                   <MapPin size={16} className="mt-0.5 shrink-0 text-brand-600" />
-                  <span>{nextBranch.address}</span>
+                  <span>{branchTwo.address}</span>
                 </p>
+                <div className="mt-3 flex items-center gap-2.5">
+                  <img
+                    src={branchTwo.headImage}
+                    alt={branchTwo.headName}
+                    loading="lazy"
+                    className="h-9 w-9 shrink-0 rounded-full border border-brand-100 object-cover object-top sm:h-10 sm:w-10"
+                  />
+                  <p className="min-w-0 text-xs font-semibold text-slate-700">
+                    <span className="block text-[9px] font-bold uppercase tracking-[0.14em] text-brand-700">
+                      {branchTwo.headRole}
+                    </span>
+                    {branchTwo.headName}
+                  </p>
+                </div>
                 <a
-                  href={nextBranchMapUrl}
+                  href={branchTwoMapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Get directions to ${nextBranch.location}`}
+                  aria-label={`Get directions to Branch Two, ${branchTwo.location}`}
                   className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-bold text-brand-800 transition-all duration-200 hover:border-brand-700 hover:bg-brand-700 hover:text-white hover:shadow-md focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25"
                 >
                   Get directions <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -766,6 +790,7 @@ export default function Contact({ prefill }: ContactProps) {
             </article>
           </div>
         </section>
+        <FranchiseInfo />
       </div>
     </section>
   )

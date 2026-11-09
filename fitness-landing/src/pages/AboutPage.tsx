@@ -1,10 +1,12 @@
-import { ArrowRight, Flower2 } from 'lucide-react'
+import { ArrowRight, Flower2, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import SectionHeading from '@/components/SectionHeading'
 import WhatsAppButton from '@/components/WhatsAppButton'
-import { MANAGEMENT_TEAM, TRAINERS } from '@/data/trainers'
+import { FOUNDER, TRAINERS } from '@/data/trainers'
+import { BRANCHES } from '@/data/site'
+import FranchiseInfo from '@/sections/FranchiseInfo'
 import studioImage from '@/assets/studio.jpg'
 import exerciseCutout from '@/assets/exercise-cutout.webp'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
@@ -44,57 +46,113 @@ export default function AboutPage() {
               Her Space is a women-only studio where expert coaching, thoughtful programs and a warm
               community help you feel stronger in every season of life.
             </p>
-            <a href="#management" className="btn-ghost-light mt-8">
+            <a href="#leadership" className="btn-ghost-light mt-8">
               Get to know Her Space <ArrowRight size={18} />
             </a>
           </div>
         </section>
 
-        <section id="management" className="section bg-Her Space">
+        <section id="leadership" className="section bg-Her Space">
           <div className="mx-auto max-w-7xl">
             <SectionHeading
-              eyebrow="Management team"
+              eyebrow="Founder & branch leadership"
               title={
                 <>
-                  Led with care,
+                  One vision,
                   <br />
-                  <span className="italic text-gradient">built around you.</span>
+                  <span className="italic text-gradient">rooted in community.</span>
                 </>
               }
-              description="Our leadership stays close to the studio floor, shaping coaching and programs around the women who come through our doors."
+              description="Meet the founder and the people leading our two branches, with a shared focus on women-first fitness."
             />
 
-            <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-2">
-              {MANAGEMENT_TEAM.map((member) => (
-                <article
-                  key={member.id}
-                  className="group overflow-hidden rounded-[2.5rem] border border-brand-100 bg-white shadow-premium"
-                >
-                  <div className="h-[260px] overflow-hidden bg-brand-50 sm:h-[300px]">
-                    <img
-                      src={member.image}
-                      alt={`${member.name}, ${member.role} at Her Space Studio`}
-                      loading="lazy"
-                      className="h-full w-full scale-[0.94] object-cover object-top transition-transform duration-700 group-hover:scale-[0.98]"
-                    />
-                  </div>
-                  <div className="p-5 sm:p-6">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">
-                      {member.role}
-                    </p>
-                    <h3 className="mt-2 font-display text-2xl text-slate-900 sm:text-3xl">
-                      {member.name}
-                    </h3>
-                    <p className="mt-2 text-sm font-semibold text-brand-700">
-                      {member.experience} | {member.specialty}
-                    </p>
-                    <p className="mt-4 text-sm leading-relaxed text-slate-600">{member.bio}</p>
-                  </div>
-                </article>
-              ))}
+            <article className="mx-auto grid max-w-5xl overflow-hidden rounded-[2.5rem] border border-brand-100 bg-white shadow-premium md:grid-cols-[0.8fr_1.2fr]" data-reveal>
+              <div className="relative min-h-[280px] overflow-hidden bg-brand-100 sm:min-h-[360px]">
+                <img
+                  src={FOUNDER.image}
+                  alt={`${FOUNDER.name}, ${FOUNDER.role}`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 hover:scale-[1.03]"
+                />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-brand-950/40 to-transparent" />
+              </div>
+              <div className="flex flex-col justify-center p-6 sm:p-9 lg:p-12">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-700">
+                  {FOUNDER.role}
+                </p>
+                <h2 className="mt-2 font-display text-3xl text-slate-900 sm:text-4xl">
+                  {FOUNDER.name}
+                </h2>
+                <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                  {FOUNDER.bio}
+                </p>
+              </div>
+            </article>
+
+            <div className="mx-auto mt-12 max-w-5xl" data-reveal>
+              <div className="mb-6 flex flex-col items-center text-center">
+                <span className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/80 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700 shadow-sm">
+                  <MapPin size={13} /> Branches
+                </span>
+                <h3 className="mt-3 font-display text-2xl text-slate-900 sm:text-3xl">
+                  Branch leadership
+                </h3>
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600">
+                  A familiar face at every location, keeping the Her Space welcome personal.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2 md:gap-5">
+                {BRANCHES.map((branch, index) => (
+                  <article
+                    key={branch.name}
+                    className="group relative isolate overflow-hidden rounded-[1.75rem] border border-brand-100 bg-white p-4 shadow-[0_18px_45px_-32px_rgba(9,39,71,0.35)] transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-premium sm:rounded-[2rem] sm:p-6"
+                  >
+                    <div className="pointer-events-none absolute -right-12 -top-16 -z-10 h-40 w-40 rounded-full bg-brand-50 transition-transform duration-500 group-hover:scale-125" />
+                    <div className="mb-5 flex items-center justify-between">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-brand-700 sm:text-[10px]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-aqua-500" />
+                        {branch.name}
+                      </span>
+                      <span className="font-display text-2xl italic text-brand-100 sm:text-3xl">
+                        0{index + 1}
+                      </span>
+                    </div>
+
+                    <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                      <div className="shrink-0 rounded-full bg-gradient-to-br from-brand-500 to-aqua-400 p-[3px] shadow-lg shadow-brand-900/10 transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105">
+                        <img
+                          src={branch.headImage}
+                          alt={branch.headName}
+                          loading="lazy"
+                          className="h-[4.25rem] w-[4.25rem] rounded-full border-2 border-white object-cover object-top sm:h-20 sm:w-20"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="break-words font-display text-xl leading-tight text-slate-900 sm:text-2xl">
+                          {branch.location}
+                        </h4>
+                        <p className="mt-1.5 text-[9px] font-bold uppercase tracking-[0.11em] text-brand-700 sm:text-[10px] sm:tracking-[0.14em]">
+                          {branch.headRole}
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-slate-700">
+                          {branch.headName}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 flex items-start gap-2.5 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-500 sm:mt-6 sm:text-sm">
+                      <MapPin size={15} className="mt-0.5 shrink-0 text-brand-600" />
+                      <span>{branch.address}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </section>
+
+        <FranchiseInfo />
 
         <section id="trainers" className="section bg-white">
           <div className="mx-auto max-w-7xl">

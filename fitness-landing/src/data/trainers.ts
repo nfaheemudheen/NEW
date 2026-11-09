@@ -1,13 +1,3 @@
-export type ManagementMember = {
-  id: string
-  name: string
-  role: string
-  specialty: string
-  experience: string
-  bio: string
-  image: string
-}
-
 export type Trainer = {
   id: string
   name: string
@@ -16,26 +6,12 @@ export type Trainer = {
   image: string
 }
 
-export const MANAGEMENT_TEAM: ManagementMember[] = [
-  {
-    id: 'ranjitha',
-    name: 'Ranjitha Arunkumar',
-    role: 'Fitness Coach | Nutritionist',
-    specialty: 'Yoga & Mobility',
-    experience: '4 years',
-    bio: 'Ranjitha brings fitness coaching and practical nutrition guidance together, with a thoughtful focus on mobility and steady strength.',
-    image: '/image2.webp',
-  },
-  {
-    id: 'shanthi',
-    name: 'Shanthi Kasiraj',
-    role: 'Fitness Coach | Nutritionist | Social Media Influencer',
-    specialty: 'Strength & Conditioning',
-    experience: '4 years',
-    bio: 'Shanthi combines fitness coaching and nutrition guidance with an encouraging online presence that helps women feel supported in their wellness journey.',
-    image: '/iamge1.webp',
-  },
-]
+export const FOUNDER = {
+  name: 'Shanthi Kasiraj',
+  role: 'Founder, Her Space',
+  bio: 'Shanthi built Her Space around one belief: every woman deserves a room where she can take up space. She leads with patient coaching and a commitment to making fitness feel welcoming and empowering.',
+  image: '/iamge1.webp',
+}
 
 export const TRAINERS: Trainer[] = [
   {

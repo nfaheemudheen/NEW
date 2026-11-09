@@ -17,5 +17,6 @@ function normalizeApiBaseUrl(value: string | undefined) {
 export const API_BASE_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL)
 
 export function apiUrl(path: string) {
-  return `${API_BASE_URL}${path}`
+  const base = API_BASE_URL.replace(/\/+$/, '')
+  return `${base}${path.startsWith('/') ? path : `/${path}`}`
 }

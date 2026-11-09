@@ -13,8 +13,6 @@ const HEADER_LINKS = NAV_LINKS.filter(
     : [link],
 )
 
-const BLOG_URL = 'https://herspacefitness.com/blog/'
-
 type HeaderProps = {
   onJoin: () => void
 }
@@ -113,7 +111,7 @@ export default function Header({ onJoin }: HeaderProps) {
   }
 
   const navHref = (id: string) => {
-    if (id === 'blog') return BLOG_URL
+    if (id === 'blog') return '/blog'
     if (id === 'about') return '/about'
     if (id === 'services') return '/services'
     if (id === 'diet-plans') return '/diet-plans'
@@ -123,7 +121,7 @@ export default function Header({ onJoin }: HeaderProps) {
     return location.pathname === '/' ? `#${id}` : `/#${id}`
   }
   const isNavActive = (id: string) => {
-    if (id === 'blog') return false
+    if (id === 'blog') return location.pathname.startsWith('/blog')
     if (location.pathname === '/about') return id === 'about'
     if (location.pathname.startsWith('/services')) return id === 'services'
     if (location.pathname === '/diet-plans') return id === 'diet-plans'
@@ -139,6 +137,7 @@ export default function Header({ onJoin }: HeaderProps) {
       id === 'about' ||
       id === 'services' ||
       id === 'diet-plans' ||
+      id === 'blog' ||
       id === 'contact' ||
       id === 'faqs'
     )
@@ -180,8 +179,6 @@ export default function Header({ onJoin }: HeaderProps) {
                   'group relative rounded-full px-3.5 py-2.5 text-base font-semibold text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-brand-800 hover:shadow-[0_8px_18px_-12px_rgba(0,91,173,0.65)] focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/15 after:absolute after:bottom-1.5 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-gradient-to-r after:from-brand-600 after:to-aqua-500 after:transition-all after:duration-300 after:content-[\'\'] hover:after:w-1/2',
                   isNavActive(link.id) && 'bg-brand-50/90 text-brand-900 after:w-1/2',
                 )}
-                target={link.id === 'blog' ? '_blank' : undefined}
-                rel={link.id === 'blog' ? 'noopener noreferrer' : undefined}
               >
                 {link.label}
               </a>
@@ -254,8 +251,6 @@ export default function Header({ onJoin }: HeaderProps) {
                       'block rounded-2xl border border-transparent px-4 py-3.5 text-lg font-semibold text-slate-700 transition-all duration-200 hover:translate-x-1 hover:border-brand-100 hover:bg-brand-50 hover:text-brand-800 hover:shadow-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/15',
                       isNavActive(link.id) && 'border-brand-100 bg-brand-50 text-brand-900',
                     )}
-                    target={link.id === 'blog' ? '_blank' : undefined}
-                    rel={link.id === 'blog' ? 'noopener noreferrer' : undefined}
                   >
                     {link.label}
                   </a>
@@ -269,14 +264,15 @@ export default function Header({ onJoin }: HeaderProps) {
               <div className="mt-8 space-y-3 border-t border-slate-100 pt-6 text-sm">
                 <a
                   href={`mailto:${STUDIO.email}`}
-                  className="flex items-center gap-3 rounded-xl px-1 py-1 text-slate-600 hover:text-brand-700"
+                  className="flex min-w-0 items-center gap-3 rounded-xl px-1 py-1 text-slate-600 hover:text-brand-700"
                 >
-                  <Mail size={16} className="text-brand-600" /> {STUDIO.email}
+                  <Mail size={16} className="shrink-0 text-brand-600" />
+                  <span className="min-w-0 break-all">{STUDIO.email}</span>
                 </a>
               </div>
 
               <p className="mt-auto pt-8 text-xs leading-relaxed text-slate-400">
-                Women-only fitness studio · {STUDIO.address}
+                Women-only fitness studio · <span className="break-words">{STUDIO.address}</span>
               </p>
             </motion.div>
           </>

@@ -18,9 +18,10 @@ const SOCIAL_ICONS = {
   YouTube: YouTubeIcon,
 } as const
 
-const QUICK_LINKS = NAV_LINKS.filter((link) =>
-  ['home', 'about', 'programs', 'faqs'].includes(link.id),
-)
+const QUICK_LINKS = [
+  ...NAV_LINKS.filter((link) => ['home', 'about', 'programs', 'faqs'].includes(link.id)),
+  { label: 'Blog', id: 'blog' },
+]
 
 const FITNESS_LINKS = [
   { label: 'Membership', href: '#membership' },
@@ -35,6 +36,7 @@ export default function Footer() {
   const lastFocused = useRef<HTMLElement | null>(null)
   const sectionHref = (id: string) => {
     if (id === 'about') return '/about'
+    if (id === 'blog') return '/blog'
     if (id === 'contact') return '/contact'
     if (id === 'faqs') return '/faqs'
     if (id === 'home') return '/'

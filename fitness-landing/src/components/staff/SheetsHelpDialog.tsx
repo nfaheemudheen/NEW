@@ -8,24 +8,29 @@ import {
   X,
 } from 'lucide-react'
 import { copyToClipboard } from '@/lib/export'
-import { isSheetsConfigured, sheetsSpreadsheetUrl } from '@/lib/sheets'
+import { canPullFromSheet, isSheetsConfigured, sheetsSpreadsheetUrl } from '@/lib/sheets'
 import { cn } from '@/lib/utils'
 
-const ENV_TEMPLATE = `VITE_API_BASE_URL=https://your-render-backend.onrender.com
-VITE_SHEETS_SPREADSHEET_ID=YOUR_GOOGLE_SHEET_ID`
+const ENV_TEMPLATE = `# Option A - Apps Script webhook (works on any static host)
+VITE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+VITE_SHEETS_SHARED_SECRET=hs_sync_2f8c1d6a4b9e7f3c5a0d8e6b2c4f7a9d
+VITE_SHEETS_SPREADSHEET_ID=YOUR_GOOGLE_SHEET_ID
+
+# Option B - Node backend (also enables staff pull + delete)
+# VITE_API_BASE_URL=https://your-backend.onrender.com`
 
 const STEPS = [
   {
-    title: 'Deploy the submissions backend',
-    body: 'Deploy the backend/ folder as a Node service on Render. Add the Google service-account and staff environment variables from backend/.env.example.',
+    title: 'Publish the Apps Script web app',
+    body: 'Open google-apps-script/Code.gs in the studio spreadsheet Apps Script editor. Deploy it as a web app that executes as you and is accessible to Anyone, then copy the /exec URL.',
   },
   {
-    title: 'Share the sheet with the service account',
-    body: 'Share the spreadsheet with GOOGLE_SERVICE_ACCOUNT_EMAIL and give it Editor access. Keep GOOGLE_PRIVATE_KEY in Render only.',
+    title: 'Add the connection details to the site',
+    body: 'Set VITE_SHEETS_WEBHOOK_URL and VITE_SHEETS_SHARED_SECRET in your hosting dashboard and redeploy. Vercel can instead use SHEETS_WEBHOOK_URL and SHEETS_SHARED_SECRET with the bundled api/enquiries proxy.',
   },
   {
-    title: 'Configure the frontend',
-    body: 'Set VITE_API_BASE_URL in Vercel to the Render service URL and redeploy the website.',
+    title: 'Optional: deploy the backend',
+    body: 'The backend/ folder adds staff login, sheet pulls and row deletion. Deploy it as a Node service with the variables in backend/.env.example, share the sheet with the service account, then set VITE_API_BASE_URL.',
   },
   {
     title: 'Sync existing enquiries',
@@ -158,7 +163,9 @@ export default function SheetsHelpDialog({ onClose }: { onClose: () => void }) {
               </p>
               <p className="mt-0.5 text-slate-600">
                 {isSheetsConfigured
-                  ? 'New enquiries sync automatically. Use Sync now to push status and note changes, or pull edits made directly in the sheet.'
+                  ? canPullFromSheet
+                    ? 'New enquiries sync automatically. Use Sync now to push status and note changes, or pull edits made directly in the sheet.'
+                    : 'New enquiries sync automatically. Use Sync now to push status and note changes saved in this browser.'
                   : 'Every submission is safely kept in this browser. Finish the four steps below to mirror them into a spreadsheet.'}
               </p>
               {isSheetsConfigured && sheetsSpreadsheetUrl && (
@@ -215,14 +222,15 @@ export default function SheetsHelpDialog({ onClose }: { onClose: () => void }) {
           </div>
 
           <p className="mt-4 rounded-xl bg-slate-50 px-4 py-3 text-[10px] leading-relaxed text-slate-400">
-            Sync works both ways: pressing Sync now pushes local status and note changes, then pulls
-            any edits or new rows from the sheet. Deleting an enquiry in the portal also removes its
-            sheet row. Sample enquiries are never synced.
+            {canPullFromSheet
+              ? 'Sync works both ways: pressing Sync now pushes local status and note changes, then pulls any edits or new rows from the sheet. Deleting an enquiry in the portal also removes its sheet row. Sample enquiries are never synced.'
+              : 'Pressing Sync now pushes status and note changes stored in this browser to the spreadsheet. Deploy the backend to also pull sheet edits and delete rows. Sample enquiries are never synced.'}
           </p>
 
           <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-[10px] leading-relaxed text-slate-400">
-            Keep the shared secret in both the Apps Script and your environment. For a live site,
-            add the same variables in your hosting dashboard (Vercel, Netlify, etc.) and redeploy.
+            Keep the shared secret in both the Apps Script and the website environment. For a live
+            site, add the same variables in your hosting dashboard (Vercel, Netlify, etc.) and
+            redeploy.
           </p>
         </div>
 
