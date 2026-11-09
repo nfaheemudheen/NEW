@@ -25,6 +25,7 @@ export default function Header({ onJoin }: HeaderProps) {
   const reduceMotion = useReducedMotion()
   const toggleRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+  const restoreScrollFrameRef = useRef<number | null>(null)
 
   useEffect(() => {
     const onScroll = () => {
@@ -57,6 +58,11 @@ export default function Header({ onJoin }: HeaderProps) {
   useEffect(() => {
     if (!open) return
 
+    if (restoreScrollFrameRef.current !== null) {
+      cancelAnimationFrame(restoreScrollFrameRef.current)
+      restoreScrollFrameRef.current = null
+    }
+
     const scrollY = window.scrollY
     const previousBodyStyles = {
       position: document.body.style.position,
@@ -85,7 +91,7 @@ export default function Header({ onJoin }: HeaderProps) {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpen(false)
-        toggleRef.current?.focus()
+        toggleRef.current?.focus({ preventScroll: true })
         return
       }
 
@@ -117,14 +123,19 @@ export default function Header({ onJoin }: HeaderProps) {
       document.body.style.right = previousBodyStyles.right
       document.body.style.width = previousBodyStyles.width
       document.body.style.overflow = previousBodyStyles.overflow
-      window.scrollTo(0, scrollY)
+      // Restore after the fixed-body styles have been painted away. Restoring
+      // synchronously here can race the browser's own scroll anchoring on mobile.
+      restoreScrollFrameRef.current = requestAnimationFrame(() => {
+        window.scrollTo({ top: scrollY, left: 0, behavior: 'instant' })
+        restoreScrollFrameRef.current = null
+      })
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [open])
 
   const closeMenu = () => {
     setOpen(false)
-    toggleRef.current?.focus()
+    toggleRef.current?.focus({ preventScroll: true })
   }
 
   const handleJoin = () => {
