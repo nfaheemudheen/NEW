@@ -27,8 +27,8 @@ export default function Statistics() {
               <Sparkles size={14} /> Our impact
             </div>
             <h2 className="section-title !mb-0 text-balance">
-              Small studio.
-              <span className="block italic text-gradient">Big momentum.</span>
+              Train Hard.
+              <span className="block italic text-gradient">Live Better.</span>
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 md:text-lg">
               Stronger together, one class at a time. Here is a snapshot of the Her Space community and
