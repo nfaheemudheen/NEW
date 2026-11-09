@@ -683,76 +683,56 @@ export default function Contact({ prefill }: ContactProps) {
             </span>
           </div>
 
-          <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-5">
-            <a
-              href={branchOneMapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Get directions to Branch One, ${branchOne.location}`}
-              className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-brand-950 via-brand-900 to-brand-700 p-5 text-white shadow-premium transition-all duration-300 hover:-translate-y-1 hover:shadow-glow focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 sm:min-h-[240px] sm:p-7"
-            >
-              <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-aqua-400/20 blur-3xl transition-transform duration-700 group-hover:scale-125" />
-              <div className="relative flex min-w-0 items-start justify-between gap-2 sm:gap-4">
-                <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-aqua-300 sm:h-12 sm:w-12">
-                    <MapPin size={21} />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-aqua-200">
-                      {branchOne.name}
-                    </span>
-                    <span className="mt-0.5 block break-words font-display text-lg leading-tight sm:text-2xl">
-                      {branchOne.location}
-                    </span>
-                  </span>
-                </div>
-                <ArrowUpRight size={20} className="relative shrink-0 text-white/70 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white" />
-              </div>
-              <div className="relative mt-5">
-                <p className="max-w-xl text-sm leading-relaxed text-white/75">
-                  {branchOne.address}
-                </p>
-                <span className="mt-5 inline-flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-full bg-aqua-400 px-3 py-2.5 text-center text-xs font-bold leading-tight text-brand-950 shadow-lg shadow-brand-950/20 transition-colors group-hover:bg-aqua-300 sm:gap-2 sm:px-4 sm:text-sm">
-                  Branch One directions <ArrowRight size={15} className="shrink-0" />
-                </span>
-              </div>
-            </a>
+          <div className="relative grid items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
+            {[branchOne, branchTwo].map((branch, index) => {
+              const mapUrl = index === 0 ? branchOneMapUrl : branchTwoMapUrl
 
-            <article className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white bg-white/90 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-[0_22px_50px_-30px_rgba(0,91,173,0.3)] sm:min-h-[240px] sm:p-7">
-              <div className="flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 sm:h-12 sm:w-12">
-                    <MapPin size={21} />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
-                      {branchTwo.name}
-                    </p>
-                    <h3 className="mt-0.5 break-words font-display text-xl leading-tight text-slate-900 sm:text-2xl">
-                      {branchTwo.location}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-5 border-t border-slate-100 pt-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
-                  Branch address
-                </p>
-                <p className="mt-1.5 flex items-start gap-2.5 text-sm leading-relaxed text-slate-600">
-                  <MapPin size={16} className="mt-0.5 shrink-0 text-brand-600" />
-                  <span>{branchTwo.address}</span>
-                </p>
-                <a
-                  href={branchTwoMapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Get directions to Branch Two, ${branchTwo.location}`}
-                  className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-bold text-brand-800 transition-all duration-200 hover:border-brand-700 hover:bg-brand-700 hover:text-white hover:shadow-md focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25"
+              return (
+                <article
+                  key={branch.name}
+                  className="group relative flex min-h-[270px] min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-brand-100 bg-white p-5 shadow-[0_20px_50px_-35px_rgba(9,39,71,0.28)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-[0_24px_55px_-32px_rgba(0,91,173,0.25)] sm:min-h-[290px] sm:rounded-[2rem] sm:p-6 lg:p-7"
                 >
-                  Get directions <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </a>
-              </div>
-            </article>
+                  <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-lime-100/80 transition-transform duration-500 group-hover:scale-110 sm:h-40 sm:w-40" />
+                  <div className="relative flex items-start justify-between gap-3">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-700">
+                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-lime-500" />
+                      {branch.name}
+                    </span>
+                    <span aria-hidden="true" className="shrink-0 font-display text-2xl italic leading-none text-brand-100 sm:text-3xl">
+                      0{index + 1}
+                    </span>
+                  </div>
+
+                  <div className="relative mt-5 flex min-w-0 items-center gap-3.5 sm:mt-6 sm:gap-4">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-700 text-white shadow-md shadow-brand-700/20 sm:h-14 sm:w-14">
+                      <MapPin size={22} />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-600">Visit us</p>
+                      <h3 className="mt-1 break-words font-display text-xl leading-tight text-slate-900 sm:text-2xl">
+                        {branch.location}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="relative mt-5 border-t border-slate-100 pt-4 sm:mt-6">
+                    <p className="flex min-w-0 items-start gap-2.5 text-sm leading-relaxed text-slate-600">
+                      <MapPin size={16} className="mt-0.5 shrink-0 text-brand-600" />
+                      <span className="min-w-0">{branch.address}</span>
+                    </p>
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Get directions to ${branch.name}, ${branch.location}`}
+                      className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-2 text-xs font-bold text-brand-800 transition-all duration-200 hover:border-brand-700 hover:bg-brand-700 hover:text-white hover:shadow-md focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 sm:text-sm"
+                    >
+                      Get directions <ArrowUpRight size={15} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </a>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </section>
         <FranchiseInfo />
