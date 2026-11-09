@@ -13,7 +13,7 @@ export const STUDIO = {
   socials: [
     { label: 'Instagram', href: 'https://instagram.com' },
     { label: 'Facebook', href: 'https://facebook.com' },
-    { label: 'YouTube', href: 'https://www.youtube.com/@herspacefitnessstudio' },
+    { label: 'YouTube', href: 'https://www.youtube.com/@shanthikasiraj' },
   ],
 }
 

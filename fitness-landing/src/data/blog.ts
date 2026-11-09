@@ -14,7 +14,7 @@ import videoMemberStoryImage from '@/assets/blog/yt-member-story.jpg'
 import videoWallExercisesImage from '@/assets/blog/yt-wall-exercises.jpg'
 
 export const BLOG_HOME_URL = 'https://herspacefitness.com/blog/'
-export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@herspacefitnessstudio'
+export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@shanthikasiraj'
 
 export const BLOG_CATEGORIES = [
   'All',

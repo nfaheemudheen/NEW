@@ -217,48 +217,15 @@ export default function BlogPage() {
 
         <section
           id="latest"
-          aria-labelledby="latest-title"
+          aria-label="Latest blog posts"
           className="relative overflow-hidden bg-[linear-gradient(180deg,#f7fafb_0%,#ffffff_48%,#f4f9ff_100%)] px-4 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
         >
           <div className="pointer-events-none absolute -left-32 top-32 h-80 w-80 rounded-full bg-brand-200/30 blur-[120px]" />
           <div className="pointer-events-none absolute -right-32 bottom-16 h-96 w-96 rounded-full bg-aqua-200/35 blur-[130px]" />
 
           <div className="relative mx-auto max-w-7xl">
-            <header data-reveal>
-              <div className="flex flex-col gap-7 border-b border-slate-200/80 pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-                <div className="max-w-3xl">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.17em] text-brand-700">
-                    <Sparkles size={14} /> Fresh reads
-                  </span>
-                  <h2
-                    id="latest-title"
-                    className="mt-4 font-display text-3xl leading-tight text-slate-900 sm:text-4xl lg:text-[3.15rem]"
-                  >
-                    For your body,
-                    <span className="mt-1 block italic text-gradient">mind and everyday life.</span>
-                  </h2>
-                  <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-                    No noise, no quick fixes — just thoughtful guidance you can put into practice
-                    this week.
-                  </p>
-                </div>
-
-                <a
-                  href={BLOG_HOME_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex w-fit shrink-0 items-center gap-3 rounded-full border border-brand-100 bg-white py-2 pl-5 pr-2 text-sm font-bold text-brand-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-md focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20"
-                >
-                  Visit the full blog
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-700 text-white transition-transform duration-300 group-hover:rotate-45">
-                    <ArrowUpRight size={17} />
-                  </span>
-                </a>
-              </div>
-            </header>
-
             <div
-              className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+              className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
               data-reveal
               data-reveal-delay="80"
             >
