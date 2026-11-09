@@ -10,7 +10,6 @@ import {
   Copy,
   Flower2,
   MessageCircle,
-  Sparkles,
 } from 'lucide-react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Header from '@/components/Header'
@@ -334,7 +333,7 @@ export default function BlogPostPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-950/20 via-transparent to-transparent" />
                   </div>
                   <span className="absolute -bottom-3 left-5 inline-flex items-center gap-2 rounded-full bg-aqua-400 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.13em] text-brand-950 shadow-lg">
-                    <Sparkles size={13} /> A Her Space read
+                    A Her Space read
                   </span>
                 </figure>
               </div>

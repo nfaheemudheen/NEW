@@ -1,4 +1,3 @@
-import { Star } from 'lucide-react'
 import SectionHeading from '@/components/SectionHeading'
 import { TESTIMONIALS } from '@/data/testimonials'
 import { cn } from '@/lib/utils'
@@ -81,19 +80,9 @@ export default function Testimonials() {
               </div>
 
               <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
-                <div
-                  className="flex items-center gap-0.5 rounded-full bg-amber-50 px-3 py-1.5 text-amber-400"
-                  aria-label={`${testimonial.rating} out of 5 stars`}
-                >
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star
-                      key={index}
-                      size={15}
-                      fill={index < testimonial.rating ? 'currentColor' : 'none'}
-                      className={index < testimonial.rating ? '' : 'text-slate-300'}
-                    />
-                  ))}
-                </div>
+                <span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700" aria-label={`${testimonial.rating} out of 5 rating`}>
+                  {testimonial.rating}/5
+                </span>
                 <span className="text-xs font-medium text-slate-400">{testimonial.timeAgo}</span>
               </div>
 

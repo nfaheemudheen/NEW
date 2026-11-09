@@ -1,4 +1,4 @@
-import { Apple, ArrowRight, Leaf, Sparkles } from 'lucide-react'
+import { Apple, ArrowRight, Leaf } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import wellnessImage from '@/assets/wellness.jpg'
 
@@ -22,7 +22,7 @@ export default function Wellness() {
           <div className="relative grid items-center lg:grid-cols-[1.05fr_0.95fr]">
             <div className="relative z-10 px-6 py-9 sm:px-10 sm:py-12 lg:px-12 lg:py-14">
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-aqua-200 backdrop-blur">
-                <Sparkles size={14} /> Nutrition &amp; wellness
+                Nutrition &amp; wellness
               </div>
               <h2 className="font-display text-4xl leading-[1.08] text-white sm:text-5xl lg:text-[3.5rem]">
                 Feel good.

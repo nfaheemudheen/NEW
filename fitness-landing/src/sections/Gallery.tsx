@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, Maximize2, Sparkles, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import SectionHeading from '@/components/SectionHeading'
 import { GALLERY } from '@/data/gallery'
 
@@ -128,8 +128,8 @@ export default function Gallery() {
             </button>
           ))}
         </div>
-        <p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
-          <Sparkles size={13} /> Sample imagery for development.
+        <p className="mt-6 text-center text-xs text-slate-500">
+          Sample imagery for development.
         </p>
       </div>
 

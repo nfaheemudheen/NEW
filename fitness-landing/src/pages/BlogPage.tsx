@@ -8,7 +8,6 @@ import {
   Clock3,
   Flower2,
   Play,
-  Sparkles,
   X,
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -146,7 +145,7 @@ export default function BlogPage() {
                 className="absolute -inset-3 rotate-[2.5deg] rounded-[2.2rem] border border-white/10 bg-white/[0.045] sm:-inset-4"
               />
               <span className="absolute -right-2 -top-3 z-20 inline-flex rotate-2 items-center gap-2 rounded-full bg-aqua-400 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-950 shadow-lg sm:-right-4 sm:-top-4">
-                <Sparkles size={13} /> Latest story
+                Latest story
               </span>
 
               <article className="relative overflow-hidden rounded-[1.9rem] border border-white/40 bg-white shadow-[0_35px_90px_-35px_rgba(0,0,0,0.7)]">

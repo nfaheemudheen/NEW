@@ -8,7 +8,6 @@ import {
   MessageCircle,
   Phone,
   Save,
-  Sparkles,
   StickyNote,
   Trash2,
   X,
@@ -289,9 +288,6 @@ export default function SubmissionDrawer({
           {submission.isSample ? (
             <section className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4 sm:p-5">
               <div className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                  <Sparkles size={17} />
-                </span>
                 <div>
                   <p className="text-sm font-semibold text-amber-900">Sample enquiry</p>
                   <p className="mt-0.5 text-[11px] leading-relaxed text-amber-800/80">

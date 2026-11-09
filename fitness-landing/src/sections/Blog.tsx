@@ -1,4 +1,4 @@
-import { ArrowUpRight, BookOpen, Heart, Leaf, Sparkles } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Heart, Leaf } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import groupYogaImage from '@/assets/gallery-yoga-duo.jpg'
 
@@ -14,7 +14,7 @@ const TOPICS = [
     description: 'Small, sustainable choices for everyday energy.',
   },
   {
-    icon: Sparkles,
+    icon: Heart,
     label: 'Everyday motivation',
     description: 'Encouragement to keep showing up for yourself.',
   },

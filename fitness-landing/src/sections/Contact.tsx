@@ -11,7 +11,6 @@ import {
   Phone,
   Send,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react'
 import { FacebookIcon, InstagramIcon, YouTubeIcon } from '@/components/SocialIcons'
 import studioImage from '@/assets/studio.jpg'
@@ -261,9 +260,6 @@ export default function Contact({ prefill }: ContactProps) {
           </div>
 
           <div className="mx-auto mt-5 inline-flex items-center gap-3 rounded-2xl border border-brand-100 bg-white/75 px-4 py-3 text-left shadow-sm backdrop-blur">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
-              <Sparkles size={18} />
-            </span>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-700">
                 No pressure
@@ -394,9 +390,6 @@ export default function Contact({ prefill }: ContactProps) {
                     commitment.
                   </p>
                 </div>
-                <span className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-brand-200 sm:flex">
-                  <Sparkles size={20} />
-                </span>
               </div>
             </div>
 

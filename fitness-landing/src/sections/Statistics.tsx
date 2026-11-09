@@ -3,7 +3,6 @@ import {
   BadgeCheck,
   CalendarDays,
   Dumbbell,
-  Sparkles,
   UsersRound,
 } from 'lucide-react'
 import communityImage from '@/assets/gallery-group.jpg'
@@ -24,7 +23,7 @@ export default function Statistics() {
         <div className="mb-10 grid items-center gap-8 md:mb-12 md:grid-cols-[1.05fr_0.95fr] lg:gap-12" data-reveal>
           <div className="max-w-2xl">
             <div className="section-badge">
-              <Sparkles size={14} /> Our impact
+              Our impact
             </div>
             <h2 className="section-title !mb-0 text-balance">
               Train Hard.
@@ -48,9 +47,6 @@ export default function Statistics() {
               <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/10 to-brand-950/10" />
               <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/95 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-brand-900 shadow-lg sm:left-5 sm:top-5">
                 <UsersRound size={14} className="text-brand-600" /> Stronger together
-              </div>
-              <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-aqua-400 text-brand-950 shadow-lg sm:right-5 sm:top-5">
-                <Sparkles size={18} />
               </div>
               <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4 sm:inset-x-6 sm:bottom-6">
                 <div>

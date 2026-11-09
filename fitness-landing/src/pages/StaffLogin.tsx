@@ -11,7 +11,6 @@ import {
   Loader2,
   LockKeyhole,
   ShieldCheck,
-  Sparkles,
   UserRound,
 } from 'lucide-react'
 import studioImage from '@/assets/studio.jpg'
@@ -30,7 +29,7 @@ const PORTAL_FEATURES = [
     text: 'Track who is new, contacted, booked or archived.',
   },
   {
-    icon: Sparkles,
+    icon: ShieldCheck,
     title: 'Ready for your spreadsheet',
     text: 'Export a CSV or sync live to Google Sheets.',
   },

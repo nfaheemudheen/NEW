@@ -8,7 +8,6 @@ import {
   HeartPulse,
   Laptop,
   Music2,
-  Sparkles,
   Timer,
   Waves,
   type LucideIcon,
@@ -38,7 +37,7 @@ type ClassFeature = {
 
 const offlineFeatures: ClassFeature[] = [
   { title: 'Yoga', description: 'Build flexibility, balance and calm through guided poses and breathwork.', icon: Flower2, image: yogaImage },
-  { title: 'Workout with props', description: 'Use simple fitness props to add support, variety and challenge to your movement.', icon: Sparkles, image: equipmentImage },
+  { title: 'Workout with props', description: 'Use simple fitness props to add support, variety and challenge to your movement.', icon: Dumbbell, image: equipmentImage },
   { title: 'Cardio', description: 'Enjoy upbeat, full-body movement designed to get you moving and build stamina.', icon: HeartPulse, image: groupImage },
   { title: 'HIIT workout', description: 'Alternate focused bursts of effort with recovery in an energizing coached session.', icon: Timer, image: functionalImage },
   { title: 'Fat burning drills', description: 'Move through dynamic circuits that blend conditioning and strength exercises.', icon: Waves, image: weightLossImage },
@@ -51,7 +50,7 @@ const onlineFeatures: ClassFeature[] = [
   { title: 'Yoga', description: 'Follow guided poses and breathwork from home to support flexibility, balance and relaxation.', icon: Flower2, image: yogaImage },
   { title: 'Cardio', description: 'Join upbeat, equipment-light movement sessions designed to keep you active wherever you are.', icon: HeartPulse, image: weightLossImage },
   { title: 'HIIT workout', description: 'Fit an energizing interval session into your day with coached work and recovery periods.', icon: Timer, image: functionalImage },
-  { title: 'Workout with props', description: 'Use everyday or recommended fitness props to add support and variety to your home workout.', icon: Sparkles, image: equipmentImage },
+  { title: 'Workout with props', description: 'Use everyday or recommended fitness props to add support and variety to your home workout.', icon: Dumbbell, image: equipmentImage },
   { title: 'Fat burning drills', description: 'Follow dynamic conditioning circuits with clear coaching and options to suit your pace.', icon: Waves, image: groupImage },
   { title: 'Strength training', description: 'Build a steady strength routine with guided exercises and progressions you can follow at home.', icon: Dumbbell, image: strengthImage },
   { title: 'Senior Ladies Strength & Mobility Program', description: 'A supportive online program centered on practical strength, comfortable movement and mobility.', icon: HeartPulse, image: wellnessImage },

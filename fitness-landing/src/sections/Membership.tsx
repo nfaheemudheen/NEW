@@ -1,4 +1,4 @@
-import { ArrowRight, Check, CreditCard, Sparkles } from 'lucide-react'
+import { ArrowRight, Check, CreditCard } from 'lucide-react'
 import { MEMBERSHIPS } from '@/data/memberships'
 import { cn } from '@/lib/utils'
 
@@ -62,7 +62,7 @@ export default function Membership({ onEnquire }: MembershipProps) {
                     plan.popular ? 'bg-aqua-500 text-brand-950' : 'bg-brand-50 text-brand-800',
                   )}
                 >
-                  {plan.popular ? <Sparkles size={12} /> : <CreditCard size={12} />}
+                  <CreditCard size={12} />
                   {plan.popular ? 'Most loved' : 'Monthly plan'}
                 </span>
                 <span

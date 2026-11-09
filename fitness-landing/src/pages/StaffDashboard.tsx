@@ -18,7 +18,6 @@ import {
   RefreshCw,
   Search,
   Settings2,
-  Sparkles,
   Trash2,
   X,
 } from 'lucide-react'
@@ -639,7 +638,7 @@ function StaffDashboardContent({ session }: { session: StaffSession }) {
           {sampleCount > 0 && (
             <div className="flex flex-col gap-2 border-b border-amber-100 bg-amber-50/60 px-4 py-2.5 text-[11px] sm:flex-row sm:items-center sm:justify-between sm:px-5">
               <p className="flex items-center gap-2 font-medium text-amber-800">
-                <Sparkles size={13} /> You're viewing {sampleCount} sample{' '}
+                You're viewing {sampleCount} sample{' '}
                 {sampleCount === 1 ? 'enquiry' : 'enquiries'}. Remove them before going live.
               </p>
               <button
@@ -752,7 +751,7 @@ function StaffDashboardContent({ session }: { session: StaffSession }) {
               </p>
               <div className="mt-6 flex flex-col items-center justify-center gap-2 sm:flex-row">
                 <button type="button" onClick={handleSeedSamples} className="btn-outline px-4 py-2.5 text-sm">
-                  <Sparkles size={15} /> Load sample enquiries
+                  Load sample enquiries
                 </button>
                 <Link
                   to="/contact"

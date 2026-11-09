@@ -168,14 +168,16 @@ export default function Header({ onJoin }: HeaderProps) {
   }
 
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-50 border-b transition-all duration-300',
-        scrolled
-          ? 'border-slate-200/80 bg-white/90 shadow-[0_8px_30px_-24px_rgba(36,53,45,0.35)] backdrop-blur-xl'
-          : 'border-transparent bg-slate-50/80 backdrop-blur-md',
-      )}
-    >
+    <>
+      <div aria-hidden="true" className="h-[72px] lg:hidden" />
+      <header
+        className={cn(
+          'fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 lg:sticky lg:inset-x-auto',
+          scrolled
+            ? 'border-slate-200/80 bg-white/90 shadow-[0_8px_30px_-24px_rgba(36,53,45,0.35)] backdrop-blur-xl'
+            : 'border-transparent bg-slate-50/80 backdrop-blur-md',
+        )}
+      >
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex h-[72px] items-center justify-between gap-6">
           <a
@@ -300,6 +302,7 @@ export default function Header({ onJoin }: HeaderProps) {
           </>
         )}
       </AnimatePresence>
-    </header>
+      </header>
+    </>
   )
 }
