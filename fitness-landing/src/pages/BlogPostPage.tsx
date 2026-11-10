@@ -15,6 +15,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import YouTubeEmbed from '@/components/YouTubeEmbed'
 import { FacebookIcon } from '@/components/SocialIcons'
 import { BLOG_POSTS, formatBlogDate, type BlogPost } from '@/data/blog'
 import { BLOG_CONTENT } from '@/data/blogContent'
@@ -323,14 +324,17 @@ export default function BlogPostPage() {
                     aria-hidden="true"
                     className="absolute -inset-3 rotate-[2deg] rounded-[2.1rem] border border-white/10 bg-white/[0.045]"
                   />
-                  <div className="relative overflow-hidden rounded-[1.75rem] border border-white/30 bg-white shadow-[0_35px_90px_-35px_rgba(0,0,0,0.75)]">
-                    <img
-                      src={post.image}
-                      alt={post.imageAlt}
-                      fetchPriority="high"
-                      className="aspect-[16/9] w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-950/20 via-transparent to-transparent" />
+                  <div className="relative aspect-[16/9] overflow-hidden rounded-[1.75rem] border border-white/30 bg-brand-100 shadow-[0_35px_90px_-35px_rgba(0,0,0,0.75)]">
+                    {post.slug === 'why-is-belly-fat-difficult-to-lose' ? (
+                      <YouTubeEmbed videoId="OQdQv9zTlqk" title="Why belly fat can be difficult to lose — Her Space Fitness Studio" />
+                    ) : (
+                      <img
+                        src={post.image}
+                        alt={post.imageAlt}
+                        fetchPriority="high"
+                        className="h-full w-full object-cover"
+                      />
+                    )}
                   </div>
                   <span className="absolute -bottom-3 left-5 inline-flex items-center gap-2 rounded-full bg-aqua-400 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.13em] text-brand-950 shadow-lg">
                     A Her Space read

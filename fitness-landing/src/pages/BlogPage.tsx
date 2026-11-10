@@ -14,6 +14,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import YouTubeEmbed from '@/components/YouTubeEmbed'
 import { YouTubeIcon } from '@/components/SocialIcons'
 import {
   BLOG_CATEGORIES,
@@ -144,44 +145,25 @@ export default function BlogPage() {
                 aria-hidden="true"
                 className="absolute -inset-3 rotate-[2.5deg] rounded-[2.2rem] border border-white/10 bg-white/[0.045] sm:-inset-4"
               />
-              <span className="absolute -right-2 -top-3 z-20 inline-flex rotate-2 items-center gap-2 rounded-full bg-aqua-400 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-950 shadow-lg sm:-right-4 sm:-top-4">
-                Latest story
-              </span>
-
               <article className="relative overflow-hidden rounded-[1.9rem] border border-white/40 bg-white shadow-[0_35px_90px_-35px_rgba(0,0,0,0.7)]">
-                <Link
-                  to={`/blog/${FEATURED_POST.slug}`}
-                  aria-label={`Read ${FEATURED_POST.title}`}
-                  className="group block overflow-hidden"
-                >
-                  <div className="relative aspect-[16/9] overflow-hidden bg-brand-100">
-                    <img
-                      src={FEATURED_POST.image}
-                      alt={FEATURED_POST.imageAlt}
-                      fetchPriority="high"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-950/25 via-transparent to-transparent" />
-                  </div>
-                </Link>
+                <div className="relative aspect-[16/9] overflow-hidden bg-brand-100">
+                  {FEATURED_POST.slug === 'why-is-belly-fat-difficult-to-lose' ? (
+                    <YouTubeEmbed videoId="OQdQv9zTlqk" title="Why belly fat can be difficult to lose — Her Space Fitness Studio" />
+                  ) : (
+                    <Link to={`/blog/${FEATURED_POST.slug}`} aria-label={`Read ${FEATURED_POST.title}`} className="group block h-full overflow-hidden">
+                      <img
+                        src={FEATURED_POST.image}
+                        alt={FEATURED_POST.imageAlt}
+                        fetchPriority="high"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-950/25 via-transparent to-transparent" />
+                    </Link>
+                  )}
+                </div>
 
                 <div className="p-5 sm:p-6">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">
-                    <span className="rounded-full bg-brand-50 px-2.5 py-1 text-brand-700">
-                      {FEATURED_POST.category}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <CalendarDays size={13} className="text-brand-600" />
-                      {formatBlogDate(FEATURED_POST.date)}
-                    </span>
-                    <span className="h-1 w-1 rounded-full bg-slate-300" />
-                    <span className="inline-flex items-center gap-1.5">
-                      <Clock3 size={13} className="text-brand-600" />
-                      {FEATURED_POST.readTime} min read
-                    </span>
-                  </div>
-
-                  <h2 className="mt-3 font-display text-[1.55rem] leading-[1.17] text-slate-900 sm:text-[1.8rem]">
+                  <h2 className="font-display text-[1.55rem] leading-[1.17] text-slate-900 sm:text-[1.8rem]">
                     <Link
                       to={`/blog/${FEATURED_POST.slug}`}
                       className="transition-colors hover:text-brand-700 focus:outline-none focus-visible:text-brand-700"
@@ -363,6 +345,17 @@ export default function BlogPage() {
                     aria-hidden="true"
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                    onError={(event) => {
+                      const image = event.currentTarget
+                      const step = Number(image.dataset.fallbackStep ?? '0')
+                      if (step === 0) {
+                        image.dataset.fallbackStep = '1'
+                        image.src = `https://i.ytimg.com/vi/${video.id}/hq720.jpg`
+                      } else if (step === 1) {
+                        image.dataset.fallbackStep = '2'
+                        image.src = `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`
+                      }
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-brand-950/15 to-brand-950/35" />
 
@@ -381,7 +374,7 @@ export default function BlogPage() {
 
                   <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                     <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-aqua-300">
-                      Studio short · {video.views}
+                      YouTube short · {video.channel}
                     </p>
                     <h3 className="mt-1.5 font-display text-[1.25rem] leading-snug text-white">
                       {video.cardTitle}
@@ -614,7 +607,7 @@ function VideoDialog({ video, onClose }: { video: StudioVideo; onClose: () => vo
           </div>
 
           <div className="mt-3 flex w-full items-center justify-between gap-3 text-[11px] text-white/60">
-            <span>{video.views}</span>
+            <span>From {video.channel}’s channel</span>
             <a
               href={`https://www.youtube.com/shorts/${video.id}`}
               target="_blank"

@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, X } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { addSubmission, markSubmissionSynced } from '@/lib/submissions'
 import { createSubmissionOnBackend } from '@/lib/sheets'
@@ -121,13 +121,12 @@ export default function BranchLaunchPopup() {
               <X size={18} />
             </button>
 
-            <div className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-[1.35rem] bg-brand-50 text-brand-700 ring-1 ring-brand-100 sm:h-[4.5rem] sm:w-[4.5rem]">
-              <MapPin size={27} strokeWidth={1.8} />
-              <span className="absolute -right-1 -top-1 h-4 w-4 rounded-full border-[3px] border-white bg-aqua-400" />
+            <div className="relative mx-auto flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-[1.35rem] bg-white shadow-sm ring-1 ring-brand-100 sm:h-20 sm:w-20">
+              <img src="/logo2.png" alt="Her Space" className="h-14 w-14 object-contain sm:h-16 sm:w-16" />
             </div>
-            <p className="relative mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-700">A new space is on its way</p>
-            <h2 id="branch-launch-title" className="relative mt-2 font-display text-3xl leading-tight text-brand-950 sm:text-4xl">
-              {step === 'announcement' && <>Thiruporur Branch <span className="text-brand-700">launching soon</span></>}
+            <p className="relative mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-700">Her Space · Thiruporur</p>
+            <h2 id="branch-launch-title" className="relative mx-auto mt-2 max-w-md font-display text-3xl leading-tight text-brand-950 sm:text-4xl">
+              {step === 'announcement' && <>Her Space is now <span className="text-brand-700">coming to Thiruporur</span></>}
               {step === 'form' && <>Join the <span className="text-brand-700">Thiruporur launch list</span></>}
               {step === 'success' && <>Thanks, <span className="text-brand-700">{form.fullName.trim()}</span></>}
             </h2>

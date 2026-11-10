@@ -8,10 +8,6 @@ import strengthBeginnersImage from '@/assets/blog/strength-beginners.jpg'
 import walkingVsRunningImage from '@/assets/blog/walking-vs-running.jpg'
 import weightLossChennaiImage from '@/assets/blog/weight-loss-chennai.jpg'
 import yogaDailyPlanImage from '@/assets/blog/yoga-daily-plan.jpg'
-import videoFitnessMythsImage from '@/assets/blog/yt-fitness-myths.jpg'
-import videoJointPainImage from '@/assets/blog/yt-joint-pain.jpg'
-import videoMemberStoryImage from '@/assets/blog/yt-member-story.jpg'
-import videoWallExercisesImage from '@/assets/blog/yt-wall-exercises.jpg'
 
 export const BLOG_HOME_URL = 'https://herspacefitness.com/blog/'
 export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@shanthikasiraj'
@@ -178,41 +174,41 @@ export type StudioVideo = {
   title: string
   cardTitle: string
   tag: string
-  views: string
+  channel: string
   image: string
 }
 
 export const STUDIO_VIDEOS: StudioVideo[] = [
   {
-    id: 'R0CdrBlwrFc',
-    title: 'Why Women Over 30 Experience Joint Pain & Bone Density Loss',
-    cardTitle: 'Joint pain & bone density after 30',
-    tag: 'Bone health',
-    views: '1.6K views',
-    image: videoJointPainImage,
+    id: 'h77h9m7-rLk',
+    title: 'Pelvic Floor Tightness? Try These 2 Gentle Relaxation Exercises!',
+    cardTitle: 'Gentle pelvic floor relaxation',
+    tag: 'Pelvic floor',
+    channel: 'Shanthi Kasiraj',
+    image: 'https://i.ytimg.com/vi/h77h9m7-rLk/maxresdefault.jpg',
   },
   {
-    id: '0aLhCDm6o8I',
-    title: '5 Fitness Myths Busted!',
-    cardTitle: '5 fitness myths, busted',
-    tag: 'Myth-busting',
-    views: '1K views',
-    image: videoFitnessMythsImage,
+    id: 'qlHHDOWR0XU',
+    title: '3 Core Exercises for a Stronger Belly! | Home Workout for Women',
+    cardTitle: '3 core exercises for a stronger belly',
+    tag: 'Core workout',
+    channel: 'Shanthi Kasiraj',
+    image: 'https://i.ytimg.com/vi/qlHHDOWR0XU/maxresdefault.jpg',
   },
   {
-    id: 'eU1XR_VudKI',
-    title: '5 Easy Wall Exercises',
-    cardTitle: '5 easy wall exercises',
-    tag: 'Quick workout',
-    views: '2.1K views',
-    image: videoWallExercisesImage,
+    id: 'LwlPFp0CGfU',
+    title: 'Women Over 40 & 50: Why You Need Strength Training!',
+    cardTitle: 'Strength training after 40',
+    tag: 'Strength training',
+    channel: 'Shanthi Kasiraj',
+    image: 'https://i.ytimg.com/vi/LwlPFp0CGfU/maxresdefault.jpg',
   },
   {
-    id: 'y8PRanopL1I',
-    title: 'This is Divya’s journey at Her Space Fitness Studio',
-    cardTitle: 'Divya’s Her Space journey',
-    tag: 'Member story',
-    views: '304 views',
-    image: videoMemberStoryImage,
+    id: 'lIbiP8wcaHU',
+    title: '3 Floor Exercises with Weights | Build Strength & Tone Your Body',
+    cardTitle: '3 floor exercises with weights',
+    tag: 'Weighted workout',
+    channel: 'Shanthi Kasiraj',
+    image: 'https://i.ytimg.com/vi/lIbiP8wcaHU/maxresdefault.jpg',
   },
 ]
